@@ -36,7 +36,7 @@ namespace UltimatePlaylist.MobileApi
 
             try
             {
-                Log.Information("Starting web host. 123");
+                Log.Information("Starting web host. 12345");
 
                 var host = CreateHostBuilder(args).Build();
 
@@ -48,7 +48,7 @@ namespace UltimatePlaylist.MobileApi
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly. 123");
+                Log.Fatal(ex, "Host terminated unexpectedly. 12345");
 
                 return 1;
             }
