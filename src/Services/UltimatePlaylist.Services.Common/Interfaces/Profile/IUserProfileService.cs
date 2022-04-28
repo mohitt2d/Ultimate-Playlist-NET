@@ -21,6 +21,8 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Profile
 
         Task<Result> IsPinCorrectAsync(Guid userExternalId, UserPinWriteServiceModel userPinWriteServiceModel);
 
+        Task<Result> DeactivateUserAsync(Guid userExternalId);
+
         Task<Result> RemovePinAsync(Guid userExternalId);
 
         Task<Result<FileReadServiceModel>> SetOrUpdateAvatarAsync(Guid userExternalId, Stream fileStream, string fileName);

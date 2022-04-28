@@ -111,6 +111,11 @@ namespace UltimatePlaylist.Services.Personalization
             return await GetUser(userExternalId)
                 .Bind(async user => await PrepareUserProfileInfoAsync(user));
         }
+        public async Task<Result> DeactivateUserAsync(Guid userExternalId)
+        {
+            return await GetUser(userExternalId)
+                 .Check(async user => await DeactivateUser(user));
+        }
 
         public async Task<Result<UserProfileInfoReadServiceModel>> UpdateUserProfileAsync(Guid userExternalId, EditUserProfileWriteServiceModel editUserProfileWriteServiceModel)
         {
@@ -200,7 +205,6 @@ namespace UltimatePlaylist.Services.Personalization
             return await GetUser(userExternalId)
                 .Bind(async user => await RemoveAvatarAsync(user));
         }
-
         #endregion
 
         #region Private Method(s)
@@ -254,6 +258,15 @@ namespace UltimatePlaylist.Services.Personalization
             var updated = await UserRepository.UpdateAndSaveAsync(user);
 
             return Result.SuccessIf(updated != null && string.IsNullOrEmpty(updated.Pin), ErrorMessages.CannotRemovePin);
+        }
+
+        private async Task<Result> DeactivateUser(User user)
+        {
+            user.IsActive = false;
+
+            var updatedEntity = await UserRepository.UpdateAndSaveAsync(user);
+
+            return Result.SuccessIf(updatedEntity != null && updatedEntity.IsActive == false, ErrorMessages.CannotDeactivateUser);
         }
 
         private async Task<Result<IReadOnlyList<UserDspEntity>>> GetUserDspAsync(Guid userExternalId)

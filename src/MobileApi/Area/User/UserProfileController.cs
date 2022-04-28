@@ -82,6 +82,14 @@ namespace UltimatePlaylist.MobileApi.Area.User
                .Finally(BuildEnvelopeResult);
         }
 
+        [HttpPost("deactivate")]
+        [ProducesEmptyEnvelope(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeactivateUser()
+        {
+            return await UserProfileService.DeactivateUserAsync(XUserExternalId)
+               .Finally(BuildEnvelopeResult);
+        }
+
         [HttpPost("check-pin")]
         [ProducesEmptyEnvelope(StatusCodes.Status200OK)]
         public async Task<IActionResult> CheckIfPinCorrectAsync(UserPinRequestModel userPinRequestModel)

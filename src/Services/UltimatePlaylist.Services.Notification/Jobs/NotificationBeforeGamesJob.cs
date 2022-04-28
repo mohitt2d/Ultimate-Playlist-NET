@@ -17,7 +17,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
     public class NotificationBeforeGamesJob
     {
         private const string Title = "Ultimate Playlist";
-        private const string Message = "Guaranteed and Non-guaranteed drawings start in a few minutes";
+        private const string Message = "Cash prizes and $20,000 Jackpot drawing just 10 min away! Still time to earn a few more chances at the cash!";
 
         #region Private members
 

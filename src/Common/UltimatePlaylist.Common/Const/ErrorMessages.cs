@@ -24,6 +24,7 @@
         public const string UserDoesNotHaveAvatar = "Cannot remove avatar not existing avatar.";
         public const string PinIsIncorrect = "Pin is incorrect. Please try again.";
         public const string CannotSetPin = "Cannot set a new pin.";
+        public const string CannotDeactivateUser = "Cannot set user deactivate.";
         public const string CannotRemovePin = "Cannot remove a pin.";
         public const string FileNotFound = "Cannot find file to upload.";
         public const string FileIsTooLarge = "Cannot upload file because it is too large.";
