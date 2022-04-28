@@ -41,6 +41,7 @@ namespace UltimatePlaylist.MobileApi
                 var host = CreateHostBuilder(args).Build();
 
                 //await InitializeDatabaseAsync(host);
+                //testing
 
                 await host.RunAsync();
 
