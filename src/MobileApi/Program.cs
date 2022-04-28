@@ -64,14 +64,14 @@ namespace UltimatePlaylist.MobileApi
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                     if (context.HostingEnvironment.IsProduction())
-                     {
-                         var builtConfig = config.Build();
-                         var secretClient = new SecretClient(
-                             new Uri(builtConfig["VaultUri"]),
-                             new DefaultAzureCredential());
-                         config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
-                     }
+                    if (context.HostingEnvironment.IsProduction())
+                    {
+                        var builtConfig = config.Build();
+                        var secretClient = new SecretClient(
+                            new Uri(builtConfig["VaultUri"]),
+                            new DefaultAzureCredential());
+                        config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+                    }
                 });
 
         private static async Task InitializeDatabaseAsync(IHost host)
