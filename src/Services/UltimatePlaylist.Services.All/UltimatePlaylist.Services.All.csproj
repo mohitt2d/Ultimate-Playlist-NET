@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>warnings</Nullable>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UltimatePlaylist.Services.Analytics\UltimatePlaylist.Services.Analytics.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.AppleMusic\UltimatePlaylist.Services.AppleMusic.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.CommonData\UltimatePlaylist.Services.CommonData.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Dsp\UltimatePlaylist.Services.Dsp.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Email\UltimatePlaylist.Services.Email.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.File\UltimatePlaylist.Services.File.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Games\UltimatePlaylist.Services.Games.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Identity\UltimatePlaylist.Services.Identity.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Leaderboard\UltimatePlaylist.Services.Leaderboard.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Notification\UltimatePlaylist.Services.Notification.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Playlist\UltimatePlaylist.Services.Playlist.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Profile\UltimatePlaylist.Services.Personalization.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Schedule\UltimatePlaylist.Services.Schedule.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Song\UltimatePlaylist.Services.Song.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Media\UltimatePlaylist.Services.Media.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Ticket\UltimatePlaylist.Services.Ticket.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.UserManagment\UltimatePlaylist.Services.UserManagement.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.UserSong\UltimatePlaylist.Services.UserSong.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Webhook\UltimatePlaylist.Services.Webhook.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Spotify\UltimatePlaylist.Services.Spotify.csproj" />
+  </ItemGroup>
+
+</Project>

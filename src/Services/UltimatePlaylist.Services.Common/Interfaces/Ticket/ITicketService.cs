@@ -1,0 +1,19 @@
+﻿#region Usings
+
+using System;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
+using UltimatePlaylist.Services.Common.Models.Dsp;
+using UltimatePlaylist.Services.Common.Models.Ticket;
+
+#endregion
+
+namespace UltimatePlaylist.Services.Common.Interfaces.Ticket
+{
+    public interface ITicketService
+    {
+        Task<Result<EarnedTicketsReadServiceModel>> AddUserTicketAsync(
+            Guid userExternalId,
+            AddTicketWriteServiceModel addTicketWriteServiceModel);
+    }
+}

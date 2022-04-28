@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+	    <Nullable>warnings</Nullable>
+        <UserSecretsId>16b144fd-22e0-4460-82bc-4512889d23f0</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\UltimatePlaylist.Common.Mvc\UltimatePlaylist.Common.Mvc.csproj" />
+    <ProjectReference Include="..\Database\UltimatePlaylist.Common.Migrations\UltimatePlaylist.Database.Migrations.csproj" />
+    <ProjectReference Include="..\Services\UltimatePlaylist.Services.All\UltimatePlaylist.Services.All.csproj" />
+  </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
+        <PackageReference Include="Azure.Identity" Version="1.5.0" />
+        <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.2.0" />
+    </ItemGroup>
+    
+</Project>
+

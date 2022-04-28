@@ -1,0 +1,35 @@
+﻿namespace UltimatePlaylist.Common.Enums
+{
+    public enum ValidationErrorType
+    {
+        InvalidPhoneNumber,
+        OnlyDigitsAllowed,
+        UserNameCannotBeEmpty,
+        FirstNameCannotBeEmpty,
+        LastNameCannotBeEmpty,
+        PasswordCannotBeEmpty,
+        PasswordIsTooShort,
+        BirthDateCannotBeEmpty,
+        GenderCannotBeEmpty,
+        IncorrectZipCodeLength,
+        IsTermsAndConditionsReadCannotBeEmpty,
+        SpotifyAuthorizationCodeCannotBeEmpty,
+        SpotifyAuthorizationRedirectUriCannotBeEmpty,
+        IncorrectSpotifyDeeplink,
+        IncorrectAppleMusicDeeplink,
+        IncorrectInstagramLink,
+        IncorrectFacebookLink,
+        IncorrectYoutubeLink,
+        IncorrectSnapchatLink,
+        OnlyDigitsBetweenOneAndFiveAllowed,
+        IncorrectTicketEarnedType,
+        IncorrectTypeValue,
+        ActualListeningSecondRequired,
+        IncorrectGuidValue,
+        InvalidActualListeningSecond,
+        InvalidPlaylistExternalId,
+        InvalidSongExternalId,
+        InvalidTimeStampValue,
+        DeviceTokenEmpty,
+    }
+}

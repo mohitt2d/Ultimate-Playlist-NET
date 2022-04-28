@@ -1,0 +1,17 @@
+﻿namespace UltimatePlaylist.Services.Common.Models.Games
+{
+    public class UltimatePayoutReadServiceModel
+    {
+        public decimal NextUltimatePrize { get; set; }
+
+        public DateTime NextUltimateDate { get; set; }
+
+        public int TicketsCount { get; set; }
+
+        public UltimatePayoutWinnerReadServiceModel UltimatePayoutWinner { get; set; }
+
+        public int[] UltimatePayoutWinningNumbers { get; set; }
+
+        public IList<int[]> UltimatePayoutUserNumbers { get; set; }
+    }
+}

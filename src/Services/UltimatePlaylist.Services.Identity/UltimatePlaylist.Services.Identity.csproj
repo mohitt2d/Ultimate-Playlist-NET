@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>warnings</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Middlewares\**" />
+	  <EmbeddedResource Remove="Middlewares\**" />
+	  <None Remove="Middlewares\**" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.54.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UltimatePlaylist.Services.Common\UltimatePlaylist.Services.Common.csproj" />
+    <ProjectReference Include="..\UltimatePlaylist.Services.Email\UltimatePlaylist.Services.Email.csproj" />
+  </ItemGroup>
+
+</Project>

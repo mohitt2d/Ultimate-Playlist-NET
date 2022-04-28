@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>warnings</Nullable>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Graph" Version="3.24.0" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+	<ProjectReference Include="..\..\Games\UltimatePlaylist.Games\UltimatePlaylist.Games.csproj" />
+    <ProjectReference Include="..\..\Common\UltimatePlaylist.Common.Mvc\UltimatePlaylist.Common.Mvc.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  UltimatePlaylist_api:
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=UltimatePlaylist_sql-database;Database=UltimatePlaylist.Db;User Id=sa;Password=zaq1@WSX;
+      - EnableSwagger=true
+      
+    ports:
+      - "8080:80"
+
+  UltimatePlaylist_sql-database:
+    environment:
+      SA_PASSWORD: "zaq1@WSX"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1443:1433"
+   

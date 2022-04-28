@@ -1,0 +1,29 @@
+version: '3.8'
+
+networks:
+  UltimatePlaylist_network:
+    name: UltimatePlaylist_network
+
+volumes:
+  UltimatePlaylist_sql_volume:
+
+services:
+  UltimatePlaylist_api:
+    image: UltimatePlaylist-api:latest
+    build:
+      context: .
+      dockerfile: ./Api/Dockerfile-Local
+    depends_on:
+      - UltimatePlaylist_sql-database
+    container_name: UltimatePlaylist-api
+    networks:
+      - UltimatePlaylist_network
+    
+  UltimatePlaylist_sql-database:
+    image: "mcr.microsoft.com/mssql/server"
+    volumes:
+      - UltimatePlaylist_sql_volume:/var/opt/mssql
+    container_name: UltimatePlaylist_sql-database
+    networks:
+      - UltimatePlaylist_network
+            
