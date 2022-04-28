@@ -21,7 +21,7 @@ namespace UltimatePlaylist.Services.Notification
                 recurringJobManager.AddOrUpdate<NotificationAfterGamesJob>(
                   nameof(NotificationAfterGamesJob),
                   p => p.RunNotificationsAfterGame(),
-                  Cron.Hourly(notificationConfig.AfterGames.Minutes),
+                  Cron.MinuteInterval(5),
                   timeZone: TimeZoneInfo.FindSystemTimeZoneById(playlistConfig.TimeZone));
             }
             else
