@@ -17,5 +17,8 @@ namespace UltimatePlaylist.Services.Common.Models.Notification
 
         [JsonProperty("sound")]
         public string Sound { get; set; } = "default";
+
+        [JsonProperty("click_action")]
+        public string ClickAction { get; set; } = "ON_NOTIFICATION";
     }
 }

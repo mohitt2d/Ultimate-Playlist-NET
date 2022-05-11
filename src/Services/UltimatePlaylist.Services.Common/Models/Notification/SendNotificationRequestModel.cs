@@ -22,6 +22,7 @@ namespace UltimatePlaylist.Services.Common.Models.Notification
             {
                 AlertTitle = title,
                 AlertBody = body,
+                ClickAction = "ON_NOTIFICATION",
             };
         }
 
