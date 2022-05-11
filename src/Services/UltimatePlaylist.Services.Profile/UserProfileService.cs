@@ -262,11 +262,9 @@ namespace UltimatePlaylist.Services.Personalization
 
         private async Task<Result> DeactivateUser(User user)
         {
-            user.IsActive = false;
-
-            var updatedEntity = await UserRepository.UpdateAndSaveAsync(user);
-
-            return Result.SuccessIf(updatedEntity != null && updatedEntity.IsActive == false, ErrorMessages.CannotDeactivateUser);
+            var result = await UserManager.DeleteAsync(user);
+            
+            return Result.SuccessIf(result != null, ErrorMessages.CannotDeactivateUser);
         }
 
         private async Task<Result<IReadOnlyList<UserDspEntity>>> GetUserDspAsync(Guid userExternalId)
