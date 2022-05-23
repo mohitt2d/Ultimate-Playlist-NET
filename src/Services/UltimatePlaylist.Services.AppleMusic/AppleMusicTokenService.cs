@@ -40,7 +40,7 @@ namespace UltimatePlaylist.Services.AppleMusic
             {
                 IssuedAt = dateTimeNow,
                 Issuer = AppleConfig.TeamId,
-                Expires = dateTimeNow.AddMonths(6),
+                //Expires = dateTimeNow.AddMonths(6),
                 SigningCredentials = new SigningCredentials(securityKey, "ES256"),
             };
 
