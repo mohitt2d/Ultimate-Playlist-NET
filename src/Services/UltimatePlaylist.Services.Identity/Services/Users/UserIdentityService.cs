@@ -127,6 +127,10 @@ namespace UltimatePlaylist.Services.Identity.Services.Users
             newUser.Gender = gender;
             newUser.IsActive = true;
             newUser.ShouldNotificationBeEnabled = true;
+            if (string.IsNullOrEmpty(newUser.PhoneNumber))
+            {
+                newUser.PhoneNumber = string.Empty;
+            }
 
             var createdUser = await UserManager.CreateAsync(newUser);
             if (!createdUser.Succeeded)
