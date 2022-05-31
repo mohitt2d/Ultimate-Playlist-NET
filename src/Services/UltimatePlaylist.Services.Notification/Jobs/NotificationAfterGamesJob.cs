@@ -74,7 +74,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
                 var totalPages = (int)Math.Ceiling((double)userCount / NotificationConst.PageSize);
                 var usersSentTo = new HashSet<long>();
-
+                Logger.LogError($"TESTING Notification afte game fired: {totalPages.ToString()}");
                 for (var page = 1; page <= totalPages; ++page)
                 {
                     var pagination = new Pagination(NotificationConst.PageSize, page, string.Empty, "created", true);
