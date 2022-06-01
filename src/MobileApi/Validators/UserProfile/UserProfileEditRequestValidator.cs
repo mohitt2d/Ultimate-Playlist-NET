@@ -38,13 +38,7 @@ namespace UltimatePlaylist.MobileApi.Validators.UserProfile
                 .EmailAddress()
                 .WithMessage(ValidationMessages.MustBeEmail)
                 .EmailAddressWithExtension();
-
-            RuleFor(p => p.PhoneNumber)
-                .NotEmpty()
-                .WithMessage(ValidationMessages.CannotBeEmpty)
-                .PhoneNumber()
-                .WithMessage(ValidationMessages.MustBePhoneNumber);
-
+            
             RuleFor(p => p.BirthDate)
                .NotEqual(DateTime.UnixEpoch)
                .WithMessage(ValidationMessages.CannotBeEmpty)

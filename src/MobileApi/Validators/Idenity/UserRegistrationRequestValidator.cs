@@ -44,13 +44,7 @@ namespace UltimatePlaylist.MobileApi.Validators.Idenity
                 .WithMessage(ValidationMessages.CannotBeEmpty)
                 .MinimumLength(8)
                 .WithMessage(string.Format(ValidationMessages.ToShort, 8));
-
-            RuleFor(p => p.PhoneNumber)
-                .NotEmpty()
-                .WithMessage(ValidationMessages.CannotBeEmpty)
-                .PhoneNumber()
-                .WithMessage(ValidationMessages.MustBePhoneNumber);
-
+            
             RuleFor(p => p.BirthDate)
                .NotEqual(DateTime.UnixEpoch)
                .WithMessage(ValidationMessages.CannotBeEmpty)
