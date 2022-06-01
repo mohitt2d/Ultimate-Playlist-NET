@@ -15,7 +15,7 @@ namespace UltimatePlaylist.MobileApi.Validators.Idenity
             RuleFor(p => p.Password)
                 .NotEmpty()
                 .WithMessage(ValidationMessages.CannotBeEmpty)
-                .MinimumLength(8)
+                .MinimumLength(10)
                 .WithMessage(string.Format(ValidationMessages.ToShort, 10));
 
             RuleFor(p => p.Token)
