@@ -243,6 +243,7 @@ namespace UltimatePlaylist.MobileApi
 
             NotificationBeforeGamesScheduler.RemoveNotificationBeforeGamesJobs(recurringJobManager);
             NotificationAfterGamesScheduler.RemoveNotificationAfterGamesJobs(recurringJobManager);
+            NotificationReminderScheduler.RemoveReminderNotificationJobs(recurringJobManager);
 
             DailyCashDrawingScheduler.RemoveDaliCashDrawingJobs(recurringJobManager);
             UltimatePayoutGameScheduler.RemoveUltimatePayoutJob(recurringJobManager);
@@ -252,6 +253,7 @@ namespace UltimatePlaylist.MobileApi
             {
                 NotificationBeforeGamesScheduler.ScheduleForNotificationsBeforeGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
                 NotificationAfterGamesScheduler.ScheduleForNotificationsAfterGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
+                NotificationReminderScheduler.ScheduleForReminderNotifications(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
 
                 UltimatePayoutGameRewardScheduler.ScheduleUltimatePayoutGameRewardJob(recurringJobManager, playlistConfig.Value.TimeZone);
                 DailyCashDrawingScheduler.SchedulealiCashDrawingJob(recurringJobManager, gamesConfig.Value, playlistConfig.Value);

@@ -14,10 +14,10 @@ using UltimatePlaylist.Services.Common.Models.Notification;
 
 namespace UltimatePlaylist.Services.Notification.Jobs
 {
-    public class NotificationBeforeGamesJob
+    public class NotificationReminderJob
     {
         private const string Title = "Ultimate Playlist";
-        private const string Message = "Listen up! Only 10 minutes left to earn entries into the Ultimate Payout jackpot drawing!";
+        private const string Message = "You still have time to win up to $20k in the Ultimate Payout jackpot! Earn entries by listening to all 40 songs!";
 
         #region Private members
 
@@ -31,7 +31,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
         #region Constructor(s)
 
-        public NotificationBeforeGamesJob(
+        public NotificationReminderJob(
             Lazy<ILogger<NotificationBeforeGamesJob>> loggerProvider,
             Lazy<IReadOnlyRepository<User>> userRepositoryProvider,
             Lazy<INotificationService> notificationServiceProvider,
@@ -100,7 +100,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Failure during sending notifications before games. Error: {ex.Message}");
+                Logger.LogError($"Failure during sending reminder notifications. Error: {ex.Message}");
             }
         }
 
