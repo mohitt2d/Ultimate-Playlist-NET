@@ -20,16 +20,16 @@ namespace UltimatePlaylist.Services.Notification
             {
                 recurringJobManager.AddOrUpdate<NotificationReminderJob>(
                   nameof(NotificationReminderJob),
-                  p => p.RunNotificationsBeforeGame(),
-                  Cron.Hourly(notificationConfig.BeforeGames.Minutes),
+                  p => p.RunReminderNotifications(),
+                  Cron.Hourly(notificationConfig.Reminder.Minutes),
                   timeZone: TimeZoneInfo.FindSystemTimeZoneById(playlistConfig.TimeZone));
             }
             else
             {
                 recurringJobManager.AddOrUpdate<NotificationReminderJob>(
                    nameof(NotificationReminderJob),
-                   p => p.RunNotificationsBeforeGame(),
-                   Cron.Daily(notificationConfig.BeforeGames.Hour, notificationConfig.BeforeGames.Minutes),
+                   p => p.RunReminderNotifications(),
+                   Cron.Daily(notificationConfig.Reminder.Hour, notificationConfig.Reminder.Minutes),
                    timeZone: TimeZoneInfo.FindSystemTimeZoneById(playlistConfig.TimeZone));
             }
         }

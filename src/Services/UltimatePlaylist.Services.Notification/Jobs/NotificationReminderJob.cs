@@ -56,7 +56,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
         #region Public methods
 
-        public async Task RunNotificationsBeforeGame()
+        public async Task RunReminderNotifications()
         {
             try
             {
