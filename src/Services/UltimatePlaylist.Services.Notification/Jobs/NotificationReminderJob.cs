@@ -21,7 +21,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
         #region Private members
 
-        private readonly Lazy<ILogger<NotificationBeforeGamesJob>> LoggerProvider;
+        private readonly Lazy<ILogger<NotificationReminderJob>> LoggerProvider;
 
         private readonly Lazy<IReadOnlyRepository<User>> UserRepositoryProvider;
 
@@ -32,10 +32,9 @@ namespace UltimatePlaylist.Services.Notification.Jobs
         #region Constructor(s)
 
         public NotificationReminderJob(
-            Lazy<ILogger<NotificationBeforeGamesJob>> loggerProvider,
+            Lazy<ILogger<NotificationReminderJob>> loggerProvider,
             Lazy<IReadOnlyRepository<User>> userRepositoryProvider,
-            Lazy<INotificationService> notificationServiceProvider,
-            Lazy<IGamesWinningCollectionService> gamesWinningCollectionServiceProvider)
+            Lazy<INotificationService> notificationServiceProvider)
         {
             LoggerProvider = loggerProvider;
             UserRepositoryProvider = userRepositoryProvider;
@@ -46,7 +45,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
         #region Properties
 
-        private ILogger<NotificationBeforeGamesJob> Logger => LoggerProvider.Value;
+        private ILogger<NotificationReminderJob> Logger => LoggerProvider.Value;
 
         private IReadOnlyRepository<User> UserRepository => UserRepositoryProvider.Value;
 

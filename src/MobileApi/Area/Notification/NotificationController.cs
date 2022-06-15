@@ -2,11 +2,15 @@
 
 using AutoMapper;
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UltimatePlaylist.Common.Mvc.Attributes;
 using UltimatePlaylist.Common.Mvc.Controllers;
+using UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces;
 using UltimatePlaylist.MobileApi.Models.Notification;
+using UltimatePlaylist.Services.Common.Interfaces.Games;
 using UltimatePlaylist.Services.Common.Interfaces.Notification;
+using UltimatePlaylist.Services.Notification.Jobs;
 using static UltimatePlaylist.Common.Mvc.Consts.Consts;
 
 #endregion
@@ -22,6 +26,11 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
 
         private readonly Lazy<IMapper> MapperProvider;
         private readonly Lazy<INotificationsSettingsService> NotificationsSettingsServiceProvider;
+        private readonly Lazy<ILogger<NotificationAfterGamesJob>> LoggingProvider;
+        private readonly Lazy<IReadOnlyRepository<Database.Infrastructure.Entities.Identity.User>> UserRepositoryProvider;
+        private readonly Lazy<INotificationService> NotificationServiceProvider;
+        private readonly Lazy<IGamesWinningCollectionService> GamesWinningCollectionServiceProvider;
+        private readonly Lazy<ILogger<NotificationReminderJob>> ReminderLoggerProvider;
 
         #endregion
 
@@ -29,10 +38,20 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
 
         public NotificationController(
             Lazy<IMapper> mapperProvider,
-            Lazy<INotificationsSettingsService> notificationsSettingsServiceProvider)
+            Lazy<INotificationsSettingsService> notificationsSettingsServiceProvider,
+            Lazy<ILogger<NotificationAfterGamesJob>> loggerProvider,
+            Lazy<IReadOnlyRepository<Database.Infrastructure.Entities.Identity.User>> userRepositoryProvider,
+            Lazy<INotificationService> notificationServiceProvider,
+            Lazy<IGamesWinningCollectionService> gamesWinningCollectionServiceProvider,
+            Lazy<ILogger<NotificationReminderJob>> reminderLoggerProvider)
         {
             MapperProvider = mapperProvider;
             NotificationsSettingsServiceProvider = notificationsSettingsServiceProvider;
+            LoggingProvider = loggerProvider;
+            UserRepositoryProvider = userRepositoryProvider;
+            NotificationServiceProvider = notificationServiceProvider;
+            GamesWinningCollectionServiceProvider = gamesWinningCollectionServiceProvider;
+            ReminderLoggerProvider = reminderLoggerProvider;
         }
 
         #endregion
@@ -72,5 +91,20 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
         }
 
         #endregion
+
+        [HttpGet("run-after-game-notification-manually")]
+        public async Task RunNotificationsAfterGamesManuallyAsync()
+        {
+            var notificationsJob = new NotificationAfterGamesJob(LoggingProvider, UserRepositoryProvider,
+                NotificationServiceProvider, GamesWinningCollectionServiceProvider);
+            await notificationsJob.RunNotificationsAfterGame();
+        }
+        [HttpGet("run-reminder-notification-manually")]
+        public async Task RunReminderNotificationsManuallyAsync()
+        {
+            var notificationsJob = new NotificationReminderJob(ReminderLoggerProvider, UserRepositoryProvider,
+                NotificationServiceProvider);
+            await notificationsJob.RunReminderNotifications();
+        }
     }
 }
