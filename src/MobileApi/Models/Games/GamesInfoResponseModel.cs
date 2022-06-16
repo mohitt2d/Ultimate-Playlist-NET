@@ -2,11 +2,11 @@
 {
     public class GamesInfoResponseModel
     {
-        public DateTime NextUltimateDate { get; set; }
+        public int NextUltimateDate { get; set; }
 
         public decimal NextUltimatePrize { get; set; }
 
-        public DateTime NextDrawingDate { get; set; }
+        public int NextDrawingDate { get; set; }
 
         public int TicketsCount { get; set; }
 
