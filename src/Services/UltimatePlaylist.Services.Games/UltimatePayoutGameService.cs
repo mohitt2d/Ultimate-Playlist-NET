@@ -135,10 +135,11 @@ namespace UltimatePlaylist.Services.Games
                     WinnerAvatarUrl = firstWinner.Winner.AvatarFile?.Url,
                 };
             }
+            var timeDiff = Convert.ToInt32(Math.Floor((nextGame.GameDate - now).TotalSeconds));
 
             return Result.Success(new UltimatePayoutReadServiceModel()
             {
-                NextUltimateDate = nextGame.GameDate,
+                NextUltimateDate = timeDiff,
                 TicketsCount = userTickets,
                 NextUltimatePrize = lastGame.Reward,
                 UltimatePayoutUserNumbers = userNumbers.Select(c => new int[] { c.FirstNumber, c.SecondNumber, c.ThirdNumber, c.FourthNumber, c.FifthNumber, c.SixthNumber }).ToList(),

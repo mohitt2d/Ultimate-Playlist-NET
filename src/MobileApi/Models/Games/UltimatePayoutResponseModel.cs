@@ -4,7 +4,7 @@
     {
         public string NextUltimatePrize { get; set; }
 
-        public DateTime NextUltimateDate { get; set; }
+        public int NextUltimateDate { get; set; }
 
         public int TicketsCount { get; set; }
 
