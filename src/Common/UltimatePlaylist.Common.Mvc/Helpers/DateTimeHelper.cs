@@ -8,6 +8,7 @@
         {
             TimeZoneInfo targetTimezone = TimeZoneInfo.Utc;
             DateTime dateTime = DateTime.UtcNow;
+            
             try
             {
                 targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
@@ -18,7 +19,12 @@
             }
 
             var dateTimeUnspec = DateTime.SpecifyKind(dateTime.Date, DateTimeKind.Unspecified);
-            return TimeZoneInfo.ConvertTimeToUtc(dateTimeUnspec, targetTimezone);
+            var temp = TimeZoneInfo.ConvertTimeToUtc(dateTimeUnspec, targetTimezone);
+            if (timezoneId == "US Eastern Standard Time")
+            {
+                temp = temp.AddHours(1);
+            }
+            return temp;
         }
 
         #endregion

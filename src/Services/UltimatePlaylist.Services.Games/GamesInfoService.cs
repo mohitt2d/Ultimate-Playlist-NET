@@ -86,7 +86,7 @@ namespace UltimatePlaylist.Services.Games
             var todayDate = DateTimeHelper.ToTodayUTCTimeForTimeZoneRelativeTime(PlaylistConfig.TimeZone);
             var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
             var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
-
+            
             var nextDate = (now < currentDate) ? currentDate : currentDate.AddDays(1);
             var timeDiff = Convert.ToInt32(Math.Floor((nextDate - now).TotalSeconds));
 
