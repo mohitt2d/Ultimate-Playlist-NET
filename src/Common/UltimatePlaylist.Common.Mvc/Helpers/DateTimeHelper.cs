@@ -19,13 +19,7 @@
             }
 
             var dateTimeUnspec = DateTime.SpecifyKind(dateTime.Date, DateTimeKind.Unspecified);
-            var aaa = targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours;
-            var temp = TimeZoneInfo.ConvertTimeToUtc(dateTimeUnspec, targetTimezone);
-            if (timezoneId == "US Eastern Standard Time" && targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours == -4)
-            {
-                temp = temp.AddHours(1);
-            }
-            return temp;
+            return TimeZoneInfo.ConvertTimeToUtc(dateTimeUnspec, targetTimezone);
         }
 
         #endregion
