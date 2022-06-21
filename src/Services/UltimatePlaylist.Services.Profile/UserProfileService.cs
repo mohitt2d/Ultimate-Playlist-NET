@@ -10,6 +10,7 @@ using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Const;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Common.Mvc.Interface;
+using UltimatePlaylist.Database.Infrastructure.Context;
 using UltimatePlaylist.Database.Infrastructure.Entities.Dsp;
 using UltimatePlaylist.Database.Infrastructure.Entities.Dsp.Specifications;
 using UltimatePlaylist.Database.Infrastructure.Entities.File;
@@ -52,6 +53,8 @@ namespace UltimatePlaylist.Services.Personalization
 
         private readonly Lazy<IUserBlacklistTokenStore> UserBlacklistTokenStoreProvider;
 
+        private readonly EFContext _context;
+
         #endregion
 
         #region Constructor(s)
@@ -66,6 +69,7 @@ namespace UltimatePlaylist.Services.Personalization
             Lazy<IMapper> mapperProvider,
             IOptions<EmailConfig> emailOptions,
             Lazy<IBackgroundJobClient> backgroundJobClientProvider,
+            EFContext context,
             Lazy<IUserBlacklistTokenStore> userBlacklistTokenStoreProvider)
         {
             UserManagerProvider = userManagerProvider;
@@ -78,6 +82,7 @@ namespace UltimatePlaylist.Services.Personalization
             EmailConfig = emailOptions.Value;
             BackgroundJobProvider = backgroundJobClientProvider;
             UserBlacklistTokenStoreProvider = userBlacklistTokenStoreProvider;
+            _context = context;
         }
 
         #endregion
@@ -262,6 +267,10 @@ namespace UltimatePlaylist.Services.Personalization
 
         private async Task<Result> DeactivateUser(User user)
         {
+            _context.UserPlaylists.Where(x => x.UserId == user.Id).DeleteFromQuery();
+            _context.UserDsps.Where(x => x.UserId == user.Id).DeleteFromQuery();
+            _context.UserSongsHistory.Where(x => x.UserId == user.Id).DeleteFromQuery();
+
             var result = await UserManager.DeleteAsync(user);
             
             return Result.SuccessIf(result != null, ErrorMessages.CannotDeactivateUser);

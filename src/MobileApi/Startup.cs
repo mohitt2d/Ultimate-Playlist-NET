@@ -89,6 +89,8 @@ namespace UltimatePlaylist.MobileApi
             var connectionString = Configuration.GetConnectionString(Config.ConnectionString);
             services.UseDatabase<EFContext>(connectionString, MigrationsAssemblyName);
 
+            services.AddDbContext<EFContext>(options => options.UseSqlServer(connectionString));
+
             var jwtOptions = services
                 .BindConfigurationWithValidation<AuthConfig>(Configuration, "Auth");
 
