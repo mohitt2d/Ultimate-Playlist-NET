@@ -115,6 +115,9 @@ namespace UltimatePlaylist.Service.Playlist
             }
             else
             {
+                var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
+                var timeDiff = Convert.ToInt32(Math.Floor((playlistDate.AddDays(1) - now).TotalSeconds));
+                playlistServiceModel.PlaylistExpirationCountDown = timeDiff;
                 return playlistServiceModel;
             }
         }
@@ -189,11 +192,14 @@ namespace UltimatePlaylist.Service.Playlist
             if (userPlaylist != null)
             {
                 userPlaylist.UserPlaylistSongs = userPlaylist.UserPlaylistSongs.Where(s => !s.IsDeleted).ToList();
-
+                var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
+                var timeDiff = Convert.ToInt32(Math.Floor((today.AddDays(1) - now).TotalSeconds));
+                
                 return userPlaylist.UserPlaylistSongs.Any()
                     ? await Result.Success(userPlaylist)
                     .Tap(_ => playlistReadServiceModel = Mapper.Map<PlaylistReadServiceModel>(userPlaylist))
                     .Tap(_ => playlistReadServiceModel.PlaylistExpirationTimeStamp = today.AddDays(1))
+                    .Tap(_ => playlistReadServiceModel.PlaylistExpirationCountDown = timeDiff)
                     .Bind(async _ => await UserSongService.GetUserSongsForPlaylistAsync(userExternalId, userPlaylist.ExternalId))
                     .Tap(userSongs => playlistReadServiceModel.Songs = userSongs.ToList())
                     .Tap(userSongs => playlistReadServiceModel.CurrentSongExternalId = userSongs.First(s => s.IsCurrent).ExternalId)
@@ -213,6 +219,8 @@ namespace UltimatePlaylist.Service.Playlist
             PlaylistEntity playlist = default;
 
             User user = default;
+            var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
+            var timeDiff = Convert.ToInt32(Math.Floor((today.AddDays(1) - now).TotalSeconds));
 
             return await Result.Success(playlistReadServiceModel)
                 .Check(async _ => await GetUserAsync(userExternalId)
@@ -222,6 +230,7 @@ namespace UltimatePlaylist.Service.Playlist
                 .Bind(async _ => await CreateUserPlaylistAsync(user, playlist, today))
                 .Tap(userPlaylist => playlistReadServiceModel = Mapper.Map<PlaylistReadServiceModel>(userPlaylist))
                 .Tap(userPlaylist => playlistReadServiceModel.PlaylistExpirationTimeStamp = today.AddDays(1))
+                .Tap(userPlaylist => playlistReadServiceModel.PlaylistExpirationCountDown = timeDiff)
                 .Bind(async userPlaylist => await UserSongService.GetUserSongsForPlaylistAsync(userExternalId, userPlaylist.ExternalId))
                 .Tap(userSongs => playlistReadServiceModel.Songs = userSongs.Where(i => i.AudioFileStreamingUrl != null && i.AudioFileStreamingUrl.Length > 0).ToList())
                 .Tap(_ => playlistReadServiceModel.CurrentSongExternalId = playlistReadServiceModel.Songs.FirstOrDefault(s => s.IsCurrent)?.ExternalId)
