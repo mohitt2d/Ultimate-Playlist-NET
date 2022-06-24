@@ -267,6 +267,16 @@ namespace UltimatePlaylist.Services.Personalization
 
         private async Task<Result> DeactivateUser(User user)
         {
+            var playlists = _context.UserPlaylists.Where(x => x.UserId == user.Id).ToList();
+            foreach (var playlist in playlists)
+            {
+                var userSonglists = _context.UserPlaylistSongs.Where(x => x.UserPlaylistId == playlist.Id).ToList();
+                userSonglists.ForEach(song =>
+                {
+                    _context.Tickets.Where(x => x.UserPlaylistSongId == song.Id).DeleteFromQuery();
+                });
+                _context.UserPlaylistSongs.Where(x => x.UserPlaylistId == playlist.Id).DeleteFromQuery();
+            }
             _context.UserPlaylists.Where(x => x.UserId == user.Id).DeleteFromQuery();
             _context.UserDsps.Where(x => x.UserId == user.Id).DeleteFromQuery();
             _context.UserSongsHistory.Where(x => x.UserId == user.Id).DeleteFromQuery();
