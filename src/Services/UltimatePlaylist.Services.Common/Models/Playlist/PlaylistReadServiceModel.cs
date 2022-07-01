@@ -19,6 +19,8 @@ namespace UltimatePlaylist.Services.Common.Models.Playlist
 
         public DateTime PlaylistExpirationTimeStamp { get; set; }
 
+        public int PlaylistExpirationCountDown { get; set; } = 0;
+
         public List<UserSongReadServiceModel> Songs { get; set; }
     }
 }

@@ -8,6 +8,7 @@
         {
             TimeZoneInfo targetTimezone = TimeZoneInfo.Utc;
             DateTime dateTime = DateTime.UtcNow;
+            
             try
             {
                 targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);

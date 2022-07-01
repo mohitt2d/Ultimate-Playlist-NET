@@ -54,13 +54,20 @@ namespace UltimatePlaylist.Services.Common.Base
 
         protected async Task<T> Get<T>(string key, CancellationToken cancellationToken = default)
         {
-            var data = await CacheService.GetAsync(GetKey(key), cancellationToken);
-            if (data is null)
+            try
+            {
+                var data = await CacheService.GetAsync(GetKey(key), cancellationToken);
+                if (data is null)
+                {
+                    return default;
+                }
+
+                return JsonSerializer.Deserialize<T>(data, SerializerOptions);
+            }
+            catch (Exception e)
             {
                 return default;
             }
-
-            return JsonSerializer.Deserialize<T>(data, SerializerOptions);
         }
 
         protected async Task Set<T>(string key, T data, CancellationToken cancellationToken = default)

@@ -86,8 +86,9 @@ namespace UltimatePlaylist.Services.Games
             var todayDate = DateTimeHelper.ToTodayUTCTimeForTimeZoneRelativeTime(PlaylistConfig.TimeZone);
             var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
             var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
-
+            
             var nextDate = (now < currentDate) ? currentDate : currentDate.AddDays(1);
+            var timeDiff = Convert.ToInt32(Math.Floor((nextDate - now).TotalSeconds));
 
             var avaiableTodayTicketsCount = await TicketRepository.CountAsync(new TicketSpecification()
                 .WithUser()
@@ -117,8 +118,8 @@ namespace UltimatePlaylist.Services.Games
             var isUnclaimed = await GamesWinningCollectionService.Get(userExternalId);
             var gamesInfo = new GamesinfoReadServiceModel()
             {
-                NextDrawingDate = nextDate,
-                NextUltimateDate = nextDate,
+                NextDrawingDate = timeDiff,
+                NextUltimateDate = timeDiff,
                 IsUnclaimed = isUnclaimed is null,
                 NextUltimatePrize = lastUltimateGame is not null ? lastUltimateGame.Reward : 20000,
                 TicketsCount = avaiableTodayTicketsCount,

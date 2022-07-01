@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,7 +49,13 @@ namespace UltimatePlaylist.Common.Mvc.Extensions
         {
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
-                Authorization = new[] { new HangfireAuthorizationFilter(), },
+                Authorization = new []
+                {
+                    new HangfireAuthorizationFilter()
+                    {
+                        
+                    }
+                }
             });
 
             return app;

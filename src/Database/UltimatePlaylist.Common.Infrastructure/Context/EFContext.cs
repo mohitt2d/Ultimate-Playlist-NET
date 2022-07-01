@@ -8,6 +8,7 @@ using UltimatePlaylist.Database.Infrastructure.Entities.Dsp;
 using UltimatePlaylist.Database.Infrastructure.Entities.Identity;
 using UltimatePlaylist.Database.Infrastructure.Entities.Playlist;
 using UltimatePlaylist.Database.Infrastructure.Entities.Song;
+using UltimatePlaylist.Database.Infrastructure.Entities.Ticket;
 using UltimatePlaylist.Database.Infrastructure.Entities.UserSongHistory;
 using UltimatePlaylist.Database.Infrastructure.Views;
 
@@ -45,6 +46,7 @@ namespace UltimatePlaylist.Database.Infrastructure.Context
         public DbSet<PlaylistEntity> Playlists { get; set; }
 
         public DbSet<UserPlaylistEntity> UserPlaylists { get; set; }
+        public DbSet<TicketEntity> Tickets { get; set; }
 
         public DbSet<UserPlaylistSongEntity> UserPlaylistSongs { get; set; }
 

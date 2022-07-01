@@ -22,6 +22,8 @@ namespace UltimatePlaylist.MobileApi.Models.Playlist
 
         public DateTime PlaylistExpirationTimeStamp { get; set; }
 
+        public int PlaylistExpirationCountDown { get; set; }
+
         public List<UserSongResponseModel> Songs { get; set; }
     }
 }

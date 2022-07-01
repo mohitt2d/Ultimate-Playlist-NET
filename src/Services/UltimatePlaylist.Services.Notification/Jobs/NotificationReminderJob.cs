@@ -1,4 +1,4 @@
-﻿#region Usings
+﻿#region usings
 
 using Microsoft.Extensions.Logging;
 using UltimatePlaylist.Common.Const;
@@ -14,54 +14,48 @@ using UltimatePlaylist.Services.Common.Models.Notification;
 
 namespace UltimatePlaylist.Services.Notification.Jobs
 {
-    public class NotificationAfterGamesJob
+    public class NotificationReminderJob
     {
-        private const string Title = "Ultimate Playlist Testing";
-        private const string Message = "Today’s $20,000 Jackpot drawing results are in. Also, check now to see if you were one of todays lucky cash prize winners!";
+        private const string Title = "Ultimate Playlist";
+        private const string Message = "You still have time to win up to $20k in the Ultimate Payout jackpot! Earn entries by listening to all 40 songs!";
 
         #region Private members
 
-        private readonly Lazy<ILogger<NotificationAfterGamesJob>> LoggerProvider;
+        private readonly Lazy<ILogger<NotificationReminderJob>> LoggerProvider;
 
         private readonly Lazy<IReadOnlyRepository<User>> UserRepositoryProvider;
 
         private readonly Lazy<INotificationService> NotificationServiceProvider;
 
-        private readonly Lazy<IGamesWinningCollectionService> GamesWinningCollectionServiceProvider;
-
         #endregion
 
         #region Constructor(s)
 
-        public NotificationAfterGamesJob(
-            Lazy<ILogger<NotificationAfterGamesJob>> loggerProvider,
+        public NotificationReminderJob(
+            Lazy<ILogger<NotificationReminderJob>> loggerProvider,
             Lazy<IReadOnlyRepository<User>> userRepositoryProvider,
-            Lazy<INotificationService> notificationServiceProvider,
-            Lazy<IGamesWinningCollectionService> gamesWinningCollectionServiceProvider)
+            Lazy<INotificationService> notificationServiceProvider)
         {
             LoggerProvider = loggerProvider;
             UserRepositoryProvider = userRepositoryProvider;
             NotificationServiceProvider = notificationServiceProvider;
-            GamesWinningCollectionServiceProvider = gamesWinningCollectionServiceProvider;
         }
 
         #endregion
 
         #region Properties
 
-        private ILogger<NotificationAfterGamesJob> Logger => LoggerProvider.Value;
+        private ILogger<NotificationReminderJob> Logger => LoggerProvider.Value;
 
         private IReadOnlyRepository<User> UserRepository => UserRepositoryProvider.Value;
 
         private INotificationService NotificationService => NotificationServiceProvider.Value;
 
-        private IGamesWinningCollectionService GamesWinningCollectionService => GamesWinningCollectionServiceProvider.Value;
-
         #endregion
 
         #region Public methods
 
-        public async Task RunNotificationsAfterGame()
+        public async Task RunReminderNotifications()
         {
             try
             {
@@ -74,7 +68,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
                 var totalPages = (int)Math.Ceiling((double)userCount / NotificationConst.PageSize);
                 var usersSentTo = new HashSet<long>();
-                
+
                 for (var page = 1; page <= totalPages; ++page)
                 {
                     var pagination = new Pagination(NotificationConst.PageSize, page, string.Empty, "created", true);
@@ -88,8 +82,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
 
                     foreach (var user in users)
                     {
-                        var isUnclaimed = await GamesWinningCollectionService.Get(user.ExternalId);
-                        if (!usersSentTo.Contains(user.Id) && isUnclaimed is null)
+                        if (!usersSentTo.Contains(user.Id))
                         {
                             await NotificationService.SendPushNotificationAsync(new NotificationRequestModel()
                             {
@@ -106,8 +99,15 @@ namespace UltimatePlaylist.Services.Notification.Jobs
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Failure during sending notifications after games. Error: {ex.Message}");
+                Logger.LogError($"Failure during sending reminder notifications. Error: {ex.Message}");
             }
+        }
+
+        private async Task<IReadOnlyList<User>> GetUserForNotifications()
+        {
+            return await UserRepository.ListAsync(new UserSpecification()
+                .OnlyUsers()
+                .HasDeviceToken());
         }
 
         #endregion
