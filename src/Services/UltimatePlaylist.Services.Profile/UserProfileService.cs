@@ -280,9 +280,13 @@ namespace UltimatePlaylist.Services.Personalization
             _context.UserPlaylists.Where(x => x.UserId == user.Id).DeleteFromQuery();
             _context.UserDsps.Where(x => x.UserId == user.Id).DeleteFromQuery();
             _context.UserSongsHistory.Where(x => x.UserId == user.Id).DeleteFromQuery();
-
-            var result = await UserManager.DeleteAsync(user);
             
+            var result = await UserManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                _context.UserRoles.Where(x => x.UserId == user.Id).DeleteFromQuery();
+                _context.Users.Where(x => x.ExternalId == user.ExternalId).DeleteFromQuery();
+            }
             return Result.SuccessIf(result != null, ErrorMessages.CannotDeactivateUser);
         }
 
