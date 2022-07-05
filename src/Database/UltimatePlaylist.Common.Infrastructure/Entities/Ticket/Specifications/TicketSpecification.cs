@@ -103,7 +103,8 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Ticket.Specification
 
         public TicketSpecification ByTodaysTickets()
         {
-            AddCriteria(s => s.Created.Date.Equals(DateTime.UtcNow.Date));
+            // TODO Temporal hack to test correct filtering
+            AddCriteria(s => s.Created.Date.Equals(DateTime.UtcNow.Date.AddHours(-4)));
 
             return this;
         }
