@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using System;
+using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Database.Infrastructure.Specifications;
 
@@ -104,11 +105,15 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Ticket.Specification
         public TicketSpecification ByTodaysTickets()
         {
             // TODO Temporal hack to test correct filtering
-            AddCriteria(s => s.Created.Date.Equals(DateTime.UtcNow.Date.AddHours(-4)));
+            string timezoneId = "US Eastern Standard Time";
+            var now = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, timezoneId); // converted utc timezone to EST timezone
+            TimeZoneInfo targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            double offsetHours = targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours;
+            AddCriteria(s => s.Created.AddHours(offsetHours).Date.Equals(now.Date));
 
             return this;
         }
-
+        
         #endregion
 
         #region Include
