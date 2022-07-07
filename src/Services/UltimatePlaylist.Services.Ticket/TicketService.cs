@@ -143,13 +143,21 @@ namespace UltimatePlaylist.Services.Ticket
             User user,
             AddTicketWriteServiceModel addTicketWriteServiceModel)
         {
-            return await GetSongAsync(addTicketWriteServiceModel.ExternalId)
-                .Map(async song => await GetOrAddUserSongHistoryAsync(user, song))
-                .Map(async songHistory => await AddSongSpecificTicketAsync(
-                    user.ExternalId,
-                    songHistory,
-                    addTicketWriteServiceModel.Type,
-                    addTicketWriteServiceModel.EarnedType));
+            /* return await GetSongAsync(addTicketWriteServiceModel.ExternalId)
+                 .Map(async song => await GetOrAddUserSongHistoryAsync(user, song))
+                 .Map(async songHistory => await AddSongSpecificTicketAsync(
+                     user.ExternalId,
+                     songHistory,
+                     addTicketWriteServiceModel.Type,
+                     addTicketWriteServiceModel.EarnedType));*/
+            return await GetPlaylist(addTicketWriteServiceModel.PlaylistExternalId)
+                 .Bind(playlist => GetPlaylistSong(playlist, addTicketWriteServiceModel.ExternalId))
+                 .Tap(async userPlaylistSong => await GetOrAddUserSongHistoryAsync(user, userPlaylistSong.Song))
+                 .Map(async userPlaylistSong => await AddPlaylistSpecificTicketAsync(
+                     user.ExternalId,
+                     userPlaylistSong,
+                     addTicketWriteServiceModel.Type,
+                     addTicketWriteServiceModel.EarnedType));
         }
 
         private async Task<Result<EarnedTicketsReadServiceModel>> AddTicketForUltimatePayout(
