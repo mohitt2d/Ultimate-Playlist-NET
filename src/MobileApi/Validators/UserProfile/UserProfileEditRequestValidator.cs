@@ -4,6 +4,7 @@ using System;
 using FluentValidation;
 using UltimatePlaylist.Common.Const;
 using UltimatePlaylist.Common.Mvc.Extensions;
+using UltimatePlaylist.Common.Mvc.Helpers;
 using UltimatePlaylist.MobileApi.Models.UserProfile;
 
 #endregion
@@ -57,7 +58,13 @@ namespace UltimatePlaylist.MobileApi.Validators.UserProfile
                .MustBeDigits()
                .WithMessage(ValidationMessages.MustBeNumber)
                .Length(5)
-               .WithMessage(string.Format(ValidationMessages.MustBeLength, 5));
+               .WithMessage(string.Format(ValidationMessages.MustBeLength, 5))
+               .MustAsync(async (zipCode, cancellation) =>
+               {
+                   bool isValid = await GeoCoderHelper.IsUSAZipCodeAsync(zipCode);
+                   return isValid;
+               })
+               .WithMessage(string.Format(ValidationMessages.MustBeUSZipCode));
         }
     }
 }
