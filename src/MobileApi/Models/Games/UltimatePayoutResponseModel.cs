@@ -13,5 +13,7 @@
         public int[] UltimatePayoutWinningNumbers { get; set; }
 
         public IList<int[]> UltimatePayoutUserNumbers { get; set; }
+
+        public IList<int[]> UltimatePayoutYesterdayChosenUserNumbers { get; set; }
     }
 }

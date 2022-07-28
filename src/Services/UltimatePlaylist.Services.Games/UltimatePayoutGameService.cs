@@ -119,6 +119,12 @@ namespace UltimatePlaylist.Services.Games
                 .ByUserId(userExternalId)
                 .ByGameId(nextGame.Id));
 
+            var previousUserChosenNumbers = await UserLoteryRepository.ListAsync(
+                new UserLotteryEntryEntitySpecification()
+                .WithUser()
+                .ByUserId(userExternalId)
+                .ByGameId(lastGame.Id));
+
             UltimatePayoutWinnerReadServiceModel winner = default;
             var firstWinner = lastGame.Winnings.FirstOrDefault();
             var winnerClaim = await UltimateWinningClaimService.Get(userExternalId);
@@ -143,6 +149,7 @@ namespace UltimatePlaylist.Services.Games
                 TicketsCount = userTickets,
                 NextUltimatePrize = lastGame.Reward,
                 UltimatePayoutUserNumbers = userNumbers.Select(c => new int[] { c.FirstNumber, c.SecondNumber, c.ThirdNumber, c.FourthNumber, c.FifthNumber, c.SixthNumber }).ToList(),
+                UltimatePayoutYesterdayChosenUserNumbers = previousUserChosenNumbers.Select(c => new int[] { c.FirstNumber, c.SecondNumber, c.ThirdNumber, c.FourthNumber, c.FifthNumber, c.SixthNumber }).ToList(),
                 UltimatePayoutWinner = winner,
                 UltimatePayoutWinningNumbers = new int[]
                     {
