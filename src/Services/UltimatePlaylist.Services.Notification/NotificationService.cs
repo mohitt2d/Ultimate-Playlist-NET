@@ -59,7 +59,7 @@ namespace UltimatePlaylist.Services.Notification
             var wasSuccessful = false;
 
             var request = new HttpRequestMessage(HttpMethod.Post, FirebaseConfig.NotificationUrl);
-            Logger.LogError($"TESTING Notification sending: {notificationJson}");
+            
             request.Headers.TryAddWithoutValidation("Authorization", $"key={FirebaseConfig.ServerKey}");
             request.Content = new StringContent(notificationJson, Encoding.UTF8, "application/json");
 
@@ -71,12 +71,11 @@ namespace UltimatePlaylist.Services.Notification
 
             if (wasSuccessful)
             {
-                Logger.LogError($"TESTING Notification was sent to user: {notification.Recipient}");
-                Logger.LogInformation($"Notification was sent to user: {notification.Recipient}");
+                Logger.LogError($"Notification was sent to user: {notification.Recipient}, {notification.Notification.AlertBody}");
             }
             else
             {
-                Logger.LogError($"Notification to user: {notification.Recipient} Failed.");
+                Logger.LogError($"Notification to user: {notification.Recipient} ,{notification.Notification.AlertBody} Failed.");
             }
         }
 
