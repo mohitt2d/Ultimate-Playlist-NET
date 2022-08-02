@@ -11,6 +11,7 @@ using UltimatePlaylist.Common.Mvc.Helpers;
 using UltimatePlaylist.Database.Infrastructure.Entities.Games;
 using UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications;
 using UltimatePlaylist.Database.Infrastructure.Entities.Identity;
+using UltimatePlaylist.Database.Infrastructure.Entities.Identity.Specifications;
 using UltimatePlaylist.Database.Infrastructure.Entities.Ticket;
 using UltimatePlaylist.Database.Infrastructure.Entities.Ticket.Specifications;
 using UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces;
@@ -37,6 +38,8 @@ namespace UltimatePlaylist.Services.Games
 
         private readonly Lazy<IGamesWinningCollectionService> GamesWinningCollectionServiceProvider;
 
+        private readonly Lazy<IRepository<User>> UserRepositoryProvider;
+
         private readonly PlaylistConfig PlaylistConfig;
 
         #endregion
@@ -44,6 +47,7 @@ namespace UltimatePlaylist.Services.Games
         #region Constructor(s)
 
         public GamesInfoService(
+             Lazy<IRepository<User>> userRepositoryProvider,
             Lazy<IMapper> mapperProvider,
             Lazy<IRepository<TicketEntity>> ticketRepositoryProvider,
             Lazy<IRepository<WinningEntity>> winningRepositoryProvider,
@@ -53,6 +57,7 @@ namespace UltimatePlaylist.Services.Games
             Lazy<IRepository<UltimatePayoutEntity>> ultimatePayoutEntityReposiotryProvider)
         {
             MapperProvider = mapperProvider;
+            UserRepositoryProvider = userRepositoryProvider;
             TicketRepositoryProvider = ticketRepositoryProvider;
             WinningRepositoryProvider = winningRepositoryProvider;
             GamesWinningCollectionServiceProvider = gamesWinningCollectionServiceProvider;
@@ -64,6 +69,8 @@ namespace UltimatePlaylist.Services.Games
         #endregion
 
         #region Properties
+
+        private IRepository<User> UserRepository => UserRepositoryProvider.Value;
 
         private IRepository<GameBaseEntity> GameBaseEntityReposiotry => GameBaseEntityReposiotryProvider.Value;
 
@@ -116,11 +123,21 @@ namespace UltimatePlaylist.Services.Games
                 .ByGameDate(currentDate));
 
             var isUnclaimed = await GamesWinningCollectionService.Get(userExternalId);
+            var user = await UserRepository.FirstOrDefaultAsync(new UserSpecification()
+                .ByExternalId(userExternalId)
+                );
+            
+            string timezoneId = "US Eastern Standard Time";
+            var nowTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, timezoneId);
+            TimeZoneInfo targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            double offsetHours = targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours;
+            
+            var isCreatedTodayUser = user.Created.AddHours(offsetHours).Date.Equals(nowTime.Date);  
             var gamesInfo = new GamesinfoReadServiceModel()
             {
                 NextDrawingDate = timeDiff,
                 NextUltimateDate = timeDiff,
-                IsUnclaimed = isUnclaimed is null,
+                IsUnclaimed = isCreatedTodayUser ? false : isUnclaimed is null,
                 NextUltimatePrize = lastUltimateGame is not null ? lastUltimateGame.Reward : 20000,
                 TicketsCount = avaiableTodayTicketsCount,
                 UnclaimedWinnings = Mapper.Map<List<UserWinningReadServicModel>>(winnings),
@@ -129,10 +146,22 @@ namespace UltimatePlaylist.Services.Games
             return Result.Success(gamesInfo);
         }
 
+        
         public async Task<Result<GamesinfoReadServiceModel>> CheckNewestGame(Guid userExternalId)
         {
             var newestGame = await GameBaseEntityReposiotry.FirstOrDefaultAsync(new GameBaseEntitySpecification().OrderByCreated(true));
-            return await Result.SuccessIf(newestGame is not null && newestGame.IsFinished, ErrorMessages.GameNotYetFinished)
+            var user = await UserRepository.FirstOrDefaultAsync(new UserSpecification()
+                .ByExternalId(userExternalId)
+                );
+
+            string timezoneId = "US Eastern Standard Time";
+            var nowTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, timezoneId);
+            TimeZoneInfo targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            double offsetHours = targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours;
+
+            var isCreatedTodayUser = user.Created.AddHours(offsetHours).Date.Equals(nowTime.Date);
+
+            return await Result.SuccessIf(isCreatedTodayUser || (newestGame is not null && newestGame.IsFinished), ErrorMessages.GameNotYetFinished)
                 .Bind(async () => await GetGamesInfoAsync(userExternalId));
         }
 
