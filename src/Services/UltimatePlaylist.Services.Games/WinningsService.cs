@@ -104,7 +104,7 @@ namespace UltimatePlaylist.Services.Games
                 return 250;
             }
 
-            if (place < 9)
+            if (place < 8)
             {
                 return 100;
             }
