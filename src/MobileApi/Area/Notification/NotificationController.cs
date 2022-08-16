@@ -10,6 +10,7 @@ using UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces;
 using UltimatePlaylist.MobileApi.Models.Notification;
 using UltimatePlaylist.Services.Common.Interfaces.Games;
 using UltimatePlaylist.Services.Common.Interfaces.Notification;
+using UltimatePlaylist.Services.Common.Models.Games;
 using UltimatePlaylist.Services.Notification.Jobs;
 using static UltimatePlaylist.Common.Mvc.Consts.Consts;
 
@@ -31,6 +32,7 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
         private readonly Lazy<INotificationService> NotificationServiceProvider;
         private readonly Lazy<IGamesWinningCollectionService> GamesWinningCollectionServiceProvider;
         private readonly Lazy<ILogger<NotificationReminderJob>> ReminderLoggerProvider;
+        private readonly Lazy<IGamesInfoService> GamesInfoServiceProvider;
 
         #endregion
 
@@ -43,6 +45,7 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
             Lazy<IReadOnlyRepository<Database.Infrastructure.Entities.Identity.User>> userRepositoryProvider,
             Lazy<INotificationService> notificationServiceProvider,
             Lazy<IGamesWinningCollectionService> gamesWinningCollectionServiceProvider,
+            Lazy<IGamesInfoService> gamesInfoServiceProvider,
             Lazy<ILogger<NotificationReminderJob>> reminderLoggerProvider)
         {
             MapperProvider = mapperProvider;
@@ -51,6 +54,7 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
             UserRepositoryProvider = userRepositoryProvider;
             NotificationServiceProvider = notificationServiceProvider;
             GamesWinningCollectionServiceProvider = gamesWinningCollectionServiceProvider;
+            GamesInfoServiceProvider = gamesInfoServiceProvider;
             ReminderLoggerProvider = reminderLoggerProvider;
         }
 
@@ -61,6 +65,7 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
         private IMapper Mapper => MapperProvider.Value;
 
         private INotificationsSettingsService NotificationsSettingsService => NotificationsSettingsServiceProvider.Value;
+        private IGamesInfoService GamesInfoService => GamesInfoServiceProvider.Value;
 
         #endregion
 
@@ -105,6 +110,15 @@ namespace UltimatePlaylist.MobileApi.Area.Notification
             var notificationsJob = new NotificationReminderJob(ReminderLoggerProvider, UserRepositoryProvider,
                 NotificationServiceProvider);
             await notificationsJob.RunReminderNotifications();
+        }
+
+        [HttpGet("get-notification-time-diff")]
+        [ProducesEnvelope(typeof(NotificationTimeDiffModel), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetGames()
+        {
+            return await GamesInfoService.GetNotificationTimeDiff()
+               .Map(result => Mapper.Map<NotificationTimeDiffModel>(result))
+               .Finally(BuildEnvelopeResult);
         }
     }
 }

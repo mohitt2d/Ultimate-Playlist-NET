@@ -14,4 +14,12 @@
 
         public bool IsUnclaimed { get; set; }
     }
+
+    public class NotificationTimeDiffModel
+    {
+        public int NextNotificationBeforeGame { get; set; }
+        public int NextNotificationReminder { get; set; }
+        public int NextNotificationAfterGame { get; set; }
+        public int NextDrawingDate { get; set; }
+    }
 }

@@ -87,7 +87,38 @@ namespace UltimatePlaylist.Services.Games
         #endregion
 
         #region Public Methods
+        public async Task<Result<NotificationTimeDiffModel>> GetNotificationTimeDiff()
+        {
+            var todayDate = DateTimeHelper.ToTodayUTCTimeForTimeZoneRelativeTime(PlaylistConfig.TimeZone);
+            var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
+            var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
 
+            var nextNotificationAfterGame = todayDate.AddMinutes(10);
+            var nextNotificationBeforeGame = todayDate.AddMinutes(-15);
+            var nextNotificationReminder = todayDate.AddHours(-4);
+
+            var nextDate = (now < currentDate) ? currentDate : currentDate.AddDays(1);
+            var timeDiff = Convert.ToInt32(Math.Floor((nextDate - now).TotalSeconds));
+
+            var nextAfterDate = (now < nextNotificationAfterGame) ? nextNotificationAfterGame : nextNotificationAfterGame.AddDays(1);
+            var timeDiffAfter = Convert.ToInt32(Math.Floor((nextAfterDate - now).TotalSeconds));
+
+            var nextBeforeDate = (now < nextNotificationBeforeGame) ? nextNotificationBeforeGame : nextNotificationBeforeGame.AddDays(1);
+            var timeDiffBefore = Convert.ToInt32(Math.Floor((nextBeforeDate - now).TotalSeconds));
+
+            var nextReminderDate = (now < nextNotificationReminder) ? nextNotificationReminder : nextNotificationReminder.AddDays(1);
+            var timeDiffReminder = Convert.ToInt32(Math.Floor((nextReminderDate - now).TotalSeconds));
+
+            var notifiactionInfo = new NotificationTimeDiffModel()
+            {
+                NextDrawingDate = timeDiff,
+                NextNotificationAfterGame = timeDiffAfter,
+                NextNotificationBeforeGame = timeDiffBefore,
+                NextNotificationReminder = timeDiffReminder,
+            };
+
+            return Result.Success(notifiactionInfo);
+        }
         public async Task<Result<GamesinfoReadServiceModel>> GetGamesInfoAsync(Guid userExternalId)
         {
             var todayDate = DateTimeHelper.ToTodayUTCTimeForTimeZoneRelativeTime(PlaylistConfig.TimeZone);

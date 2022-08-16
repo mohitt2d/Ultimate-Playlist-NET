@@ -14,5 +14,6 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Games
         public Task<Result<GamesinfoReadServiceModel>> CheckNewestGame(Guid userExternalId);
 
         public Task<Result<GamesinfoReadServiceModel>> ClaimWinningsAsync(Guid userExternalId);
+        public Task<Result<NotificationTimeDiffModel>> GetNotificationTimeDiff();
     }
 }
