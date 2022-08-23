@@ -4,6 +4,7 @@ using AutoMapper;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Options;
 using UltimatePlaylist.Common.Config;
+using UltimatePlaylist.Common.Models;
 using UltimatePlaylist.Common.Mvc.Helpers;
 using UltimatePlaylist.Database.Infrastructure.Entities.Games;
 using UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications;
@@ -23,6 +24,8 @@ namespace UltimatePlaylist.Services.Games
 
         private readonly Lazy<IRepository<WinningEntity>> WinningRepositoryProvider;
 
+        private readonly Lazy<IRepository<UltimatePayoutEntity>> UltimatePayoutRepositoryProvider;
+
         private readonly Lazy<IRepository<DailyCashDrawingEntity>> DailyCashDrawingRepositoryProvider;
 
         private readonly Lazy<IUltimatePayoutGameService> UltimatePayoutGameServiceProvider;
@@ -36,12 +39,14 @@ namespace UltimatePlaylist.Services.Games
         public WinningsInfoService(
             Lazy<IMapper> mapperProvider,
             Lazy<IRepository<WinningEntity>> winningRepositoryProvider,
+            Lazy<IRepository<UltimatePayoutEntity>> ultimatePayoutRepositoryProvider,
             Lazy<IRepository<DailyCashDrawingEntity>> dailyCashDrawingRepositoryProvider,
             Lazy<IUltimatePayoutGameService> ultimatePayoutGameServiceProvider,
             IOptions<PlaylistConfig> playlistConfig)
         {
             MapperProvider = mapperProvider;
             WinningRepositoryProvider = winningRepositoryProvider;
+            UltimatePayoutRepositoryProvider = ultimatePayoutRepositoryProvider;
             DailyCashDrawingRepositoryProvider = dailyCashDrawingRepositoryProvider;
             UltimatePayoutGameServiceProvider = ultimatePayoutGameServiceProvider;
             PlaylistConfig = playlistConfig.Value;
@@ -54,6 +59,7 @@ namespace UltimatePlaylist.Services.Games
         private IMapper Mapper => MapperProvider.Value;
 
         private IRepository<WinningEntity> WinningRepository => WinningRepositoryProvider.Value;
+        private IRepository<UltimatePayoutEntity> UltimatePayoutRepository => UltimatePayoutRepositoryProvider.Value;
 
         private IRepository<DailyCashDrawingEntity> DailyCashDrawingRepository => DailyCashDrawingRepositoryProvider.Value;
 
@@ -90,5 +96,34 @@ namespace UltimatePlaylist.Services.Games
                     UltimatePayoutWinningNumbers = ultimateInfo.UltimatePayoutWinningNumbers,
                 });
         }
+
+        public async Task<Result<List<DailyCashWinnerResponseModel>>> GetDailyWinnersAsync(int pageSize = 10, int pageNumber = 1)
+        {
+            var dailyCashWinners = new List<DailyCashWinnerResponseModel>();
+            var winnings = await WinningRepository.ListAsync(
+                new WinningSpecification()
+                .WithGame()
+                .WithUser()
+                .Pagination(new Pagination(pageSize: pageSize, pageNumber: pageNumber, searchValue: String.Empty, orderBy: "created", desc: true)));
+            dailyCashWinners = Mapper.Map<List<DailyCashWinnerResponseModel>>(winnings);
+
+            return Result.Success(dailyCashWinners);
+        }
+
+        public async Task<Result<List<JackpotWinnersAndNumbersResponseModel>>> GetUltimatePayoutInfoPublicAsync(int pageSize = 10, int pageNumber = 1)
+        {
+            var response = new List<JackpotWinnersAndNumbersResponseModel>();
+            var results = await UltimatePayoutRepository.ListAsync(
+                new UltimatePayoutSpecification()
+                .OrderByCreated(true)
+                .WithWinners()
+                .Pagination(new Pagination(pageSize: pageSize, pageNumber: pageNumber))
+                .ByIsFinished(true));
+
+            response = Mapper.Map<List<JackpotWinnersAndNumbersResponseModel>>(results);
+
+            return Result.Success(response);
+        }
+
     }
 }

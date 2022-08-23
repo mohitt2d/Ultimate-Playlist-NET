@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using UltimatePlaylist.Common.Models;
 using UltimatePlaylist.Database.Infrastructure.Specifications;
 
 #endregion
@@ -81,6 +82,22 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications
             return this;
         }
 
+        #endregion
+
+        #region Pagination
+        public UltimatePayoutSpecification Pagination(Pagination pagination = null)
+        {
+            if (pagination == null)
+            {
+                ApplyOrderBy(c => c.Created, true);
+            }
+            else
+            {
+                ApplyPaging(pagination);
+            }
+
+            return this;
+        }
         #endregion
     }
 }
