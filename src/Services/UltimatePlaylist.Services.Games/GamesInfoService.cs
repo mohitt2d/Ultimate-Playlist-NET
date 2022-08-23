@@ -93,8 +93,8 @@ namespace UltimatePlaylist.Services.Games
             var now = DateTimeHelper.ToUTCTimeForTimeZoneRelativeTime(DateTime.UtcNow, PlaylistConfig.TimeZone);
             var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
 
-            var nextNotificationAfterGame = todayDate.AddMinutes(10);
-            var nextNotificationBeforeGame = todayDate.AddMinutes(-15);
+            var nextNotificationAfterGame = todayDate;
+            var nextNotificationBeforeGame = todayDate.AddMinutes(-20);
             var nextNotificationReminder = todayDate.AddHours(-4);
 
             var nextDate = (now < currentDate) ? currentDate : currentDate.AddDays(1);
