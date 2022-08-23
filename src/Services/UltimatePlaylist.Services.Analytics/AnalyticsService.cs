@@ -276,7 +276,7 @@ namespace UltimatePlaylist.Services.Analytics
              SaveAnalyticsDataWriteServiceModel saveAnalyticsDataWriteServiceModel,
              PlaylistReadServiceModel playlist)
         {
-            if (saveAnalyticsDataWriteServiceModel.EventType != AnalitycsEventType.EntireSong)
+            if (saveAnalyticsDataWriteServiceModel.EventType != AnalitycsEventType.ThirtySecondsOfSong)
             {
                 return Result.Success(false);
             }
@@ -287,10 +287,12 @@ namespace UltimatePlaylist.Services.Analytics
                 return Result.Failure<bool>(ErrorMessages.SongDoesNotExist);
             }
 
+            var thirtySecondTickets = await TicketService.GetThirtySecondsTickets(userExternalId);
+
             var playlistSize = playlist.Songs.Count;
             var songIndex = playlist.Songs.IndexOf(song) + 1;
 
-            if (playlistSize / 2 == songIndex || playlistSize == songIndex)
+            if (thirtySecondTickets >= playlistSize / 2 || playlistSize == thirtySecondTickets)
             {
                 return await TicketService.AddUserTicketAsync(
                  userExternalId,
@@ -299,7 +301,7 @@ namespace UltimatePlaylist.Services.Analytics
                      ExternalId = saveAnalyticsDataWriteServiceModel.SongExternalId,
                      PlaylistExternalId = saveAnalyticsDataWriteServiceModel.PlaylistExternalId,
                      Type = TicketType.Jackpot,
-                     EarnedType = playlistSize / 2 == songIndex ? TicketEarnedType.HalfOfPlaylist : TicketEarnedType.FullPlaylist,
+                     EarnedType = playlistSize / 2 == thirtySecondTickets ? TicketEarnedType.HalfOfPlaylist : TicketEarnedType.FullPlaylist,
                  }).Map(earnedTickets => false);
             }
 

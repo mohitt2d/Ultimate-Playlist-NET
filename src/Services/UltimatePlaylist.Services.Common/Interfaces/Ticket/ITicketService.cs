@@ -15,5 +15,7 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Ticket
         Task<Result<EarnedTicketsReadServiceModel>> AddUserTicketAsync(
             Guid userExternalId,
             AddTicketWriteServiceModel addTicketWriteServiceModel);
+
+        Task<int> GetThirtySecondsTickets(Guid userExternalId);
     }
 }

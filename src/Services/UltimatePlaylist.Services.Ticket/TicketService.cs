@@ -89,6 +89,18 @@ namespace UltimatePlaylist.Services.Ticket
                 .Bind(async user => await AddUserTicketAsync(user, addTicketWriteServiceModel));
         }
 
+        public async Task<int> GetThirtySecondsTickets(Guid userExternalId)
+        {
+            var counts = await TicketRepository.CountAsync(new TicketSpecification()
+                .WithUser()
+                .BySongHistoryUserExternalIdUsingSongRelation(userExternalId)
+                .ByTodaysTickets()
+                .ByType(TicketType.Daily)
+                .ByEarnedType(TicketEarnedType.ThirtySecondsOfListenedSong)
+                .OnlyNotUsed());
+            return counts;
+        }
+
         #endregion
 
         #region Private Methods
