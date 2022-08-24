@@ -94,7 +94,7 @@ namespace UltimatePlaylist.Services.Games
             var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
 
             var nextNotificationAfterGame = todayDate;
-            var nextNotificationBeforeGame = todayDate.AddMinutes(-20);
+            var nextNotificationBeforeGame = todayDate.AddMinutes(-15);
             var nextNotificationReminder = todayDate.AddHours(-4);
 
             var nextDate = (now < currentDate) ? currentDate : currentDate.AddDays(1);
