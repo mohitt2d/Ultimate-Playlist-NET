@@ -12,5 +12,7 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Games
         public Task<Result<WinnersReadServiceModel>> GetWinnersListAsync(Guid userExternalId);
         public Task<Result<List<DailyCashWinnerResponseModel>>> GetDailyWinnersAsync(int pageSize = 10, int pageNumber = 1);
         public Task<Result<List<JackpotWinnersAndNumbersResponseModel>>> GetUltimatePayoutInfoPublicAsync(int pageSize = 10, int pageNumber = 1);
+
+        public Task<Result<List<WinningHistoryReadServicModel>>> GetWinningHistory(Guid userExternalId);
     }
 }

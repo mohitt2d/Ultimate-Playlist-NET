@@ -76,5 +76,14 @@ namespace UltimatePlaylist.MobileApi.Area.WinnerInfo
                .Finally(BuildEnvelopeResult);
         }
 
+        [HttpGet("winnings")]
+        [ProducesEnvelope(typeof(List<WinningHistoryReadServicModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetWinningHistory()
+        {
+            //Guid guid = new Guid("39E6C869-2709-ED11-B47A-501AC5190011");
+            return await WinningsService.GetWinningHistory(XUserExternalId)
+               .Finally(BuildEnvelopeResult);
+        }
+
     }
 }

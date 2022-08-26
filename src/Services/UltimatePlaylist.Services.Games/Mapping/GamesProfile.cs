@@ -34,6 +34,18 @@ namespace UltimatePlaylist.Services.Games.Mapping
                 .ForMember(p => p.Date, opt => opt.MapFrom(m => m.Created))
                 ;
 
+            CreateMap<WinningEntity, WinningHistoryReadServicModel>()
+                .ForMember(p => p.Type, opt => opt.MapFrom(m => m.Game.Type))
+                .ForMember(p => p.Amount, opt => opt.MapFrom(m => m.Amount))
+                .ForMember(p => p.Date, opt => opt.MapFrom(m => m.Created))
+                ;
+
+            CreateMap<UserLotteryEntryEntity, WinningHistoryReadServicModel>()
+                .ForMember(p => p.Type, opt => opt.MapFrom(m => m.Game.Type))
+                .ForMember(p => p.Amount, opt => opt.MapFrom(m => m.Game.Reward))
+                .ForMember(p => p.Date, opt => opt.MapFrom(m => m.Created))
+                ;
+
             CreateMap<UltimatePayoutEntity, JackpotWinnersAndNumbersResponseModel>();
 
             CreateMap<UltimatePayoutWinnerReadServiceModel, WinnerProfileReadServiceModel>();

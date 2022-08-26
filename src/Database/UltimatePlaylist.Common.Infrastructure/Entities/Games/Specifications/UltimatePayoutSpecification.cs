@@ -58,6 +58,13 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications
             return this;
         }
 
+        public UltimatePayoutSpecification ByUserExternalId(Guid userExternalId)
+        {
+            AddCriteria(t => t.Winnings.Any(w => w.Winner.ExternalId.Equals(userExternalId)));
+
+            return this;
+        }
+
         #endregion
 
         #region Includes

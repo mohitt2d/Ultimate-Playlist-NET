@@ -28,6 +28,8 @@ namespace UltimatePlaylist.Services.Games
 
         private readonly Lazy<IRepository<DailyCashDrawingEntity>> DailyCashDrawingRepositoryProvider;
 
+        private readonly Lazy<IRepository<UserLotteryEntryEntity>> UserLotteryEntryRepositoryProvider;
+
         private readonly Lazy<IUltimatePayoutGameService> UltimatePayoutGameServiceProvider;
 
         private readonly PlaylistConfig PlaylistConfig;
@@ -41,6 +43,7 @@ namespace UltimatePlaylist.Services.Games
             Lazy<IRepository<WinningEntity>> winningRepositoryProvider,
             Lazy<IRepository<UltimatePayoutEntity>> ultimatePayoutRepositoryProvider,
             Lazy<IRepository<DailyCashDrawingEntity>> dailyCashDrawingRepositoryProvider,
+            Lazy<IRepository<UserLotteryEntryEntity>> userLotteryEntryRepositoryProvider,
             Lazy<IUltimatePayoutGameService> ultimatePayoutGameServiceProvider,
             IOptions<PlaylistConfig> playlistConfig)
         {
@@ -48,6 +51,7 @@ namespace UltimatePlaylist.Services.Games
             WinningRepositoryProvider = winningRepositoryProvider;
             UltimatePayoutRepositoryProvider = ultimatePayoutRepositoryProvider;
             DailyCashDrawingRepositoryProvider = dailyCashDrawingRepositoryProvider;
+            UserLotteryEntryRepositoryProvider = userLotteryEntryRepositoryProvider;
             UltimatePayoutGameServiceProvider = ultimatePayoutGameServiceProvider;
             PlaylistConfig = playlistConfig.Value;
         }
@@ -62,6 +66,7 @@ namespace UltimatePlaylist.Services.Games
         private IRepository<UltimatePayoutEntity> UltimatePayoutRepository => UltimatePayoutRepositoryProvider.Value;
 
         private IRepository<DailyCashDrawingEntity> DailyCashDrawingRepository => DailyCashDrawingRepositoryProvider.Value;
+        private IRepository<UserLotteryEntryEntity> UserLotteryEntryRepository => UserLotteryEntryRepositoryProvider.Value;
 
         private IUltimatePayoutGameService UltimatePayoutGameService => UltimatePayoutGameServiceProvider.Value;
 
@@ -125,5 +130,29 @@ namespace UltimatePlaylist.Services.Games
             return Result.Success(response);
         }
 
+        public async Task<Result<List<WinningHistoryReadServicModel>>> GetWinningHistory(Guid userExternalId)
+        {
+            var responseDaily = new List<WinningHistoryReadServicModel>();
+            var winningHistory = await WinningRepository.ListAsync(
+                new WinningSpecification()
+                .ByUserExternalId(userExternalId)
+                .WithGame()
+                );
+            responseDaily = Mapper.Map<List<WinningHistoryReadServicModel>>(winningHistory);
+
+            /*var responsePayout = new List<WinningHistoryReadServicModel>();
+            var payoutHistory = await UserLotteryEntryRepository.ListAsync(
+                new UserLotteryEntryEntitySpecification()
+                .ByUserId(userExternalId)
+                .WithGame()
+               );
+
+            responsePayout = Mapper.Map<List<WinningHistoryReadServicModel>>(payoutHistory);
+
+            responseDaily.AddRange(responsePayout);*/
+
+            var response = responseDaily.OrderByDescending(x => x.Date).ToList();
+            return Result.Success(response);
+        }
     }
 }
