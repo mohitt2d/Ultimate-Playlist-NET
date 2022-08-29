@@ -247,9 +247,9 @@ namespace UltimatePlaylist.MobileApi
             app.SetupHangfire();
             app.SetupApi();
 
-            NotificationBeforeGamesScheduler.RemoveNotificationBeforeGamesJobs(recurringJobManager);
+            /*NotificationBeforeGamesScheduler.RemoveNotificationBeforeGamesJobs(recurringJobManager);
             NotificationAfterGamesScheduler.RemoveNotificationAfterGamesJobs(recurringJobManager);
-            NotificationReminderScheduler.RemoveReminderNotificationJobs(recurringJobManager);
+            NotificationReminderScheduler.RemoveReminderNotificationJobs(recurringJobManager);*/
 
             DailyCashDrawingScheduler.RemoveDaliCashDrawingJobs(recurringJobManager);
             UltimatePayoutGameScheduler.RemoveUltimatePayoutJob(recurringJobManager);
@@ -257,9 +257,9 @@ namespace UltimatePlaylist.MobileApi
 
             if (gamesConfig.Value.RunGames)
             {
-                NotificationBeforeGamesScheduler.ScheduleForNotificationsBeforeGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
+                /*NotificationBeforeGamesScheduler.ScheduleForNotificationsBeforeGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
                 NotificationAfterGamesScheduler.ScheduleForNotificationsAfterGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
-                NotificationReminderScheduler.ScheduleForReminderNotifications(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
+                NotificationReminderScheduler.ScheduleForReminderNotifications(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);*/
 
                 UltimatePayoutGameRewardScheduler.ScheduleUltimatePayoutGameRewardJob(recurringJobManager, playlistConfig.Value.TimeZone);
                 DailyCashDrawingScheduler.SchedulealiCashDrawingJob(recurringJobManager, gamesConfig.Value, playlistConfig.Value);

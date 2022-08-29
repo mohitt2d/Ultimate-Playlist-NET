@@ -16,7 +16,7 @@ namespace UltimatePlaylist.Services.Notification
             GamesConfig gamesConfig,
             PlaylistConfig playlistConfig)
         {
-            if (gamesConfig.TestMode)
+           /* if (gamesConfig.TestMode)
             {
                 recurringJobManager.AddOrUpdate<NotificationBeforeGamesJob>(
                   nameof(NotificationBeforeGamesJob),
@@ -31,7 +31,7 @@ namespace UltimatePlaylist.Services.Notification
                    p => p.RunNotificationsBeforeGame(),
                    Cron.Daily(notificationConfig.BeforeGames.Hour, notificationConfig.BeforeGames.Minutes),
                    timeZone: TimeZoneInfo.FindSystemTimeZoneById(playlistConfig.TimeZone));
-            }
+            }*/
         }
 
         public static void RemoveNotificationBeforeGamesJobs(IRecurringJobManager recurringJobManager)
