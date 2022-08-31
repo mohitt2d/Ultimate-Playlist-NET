@@ -154,5 +154,35 @@ namespace UltimatePlaylist.Services.Games
             var response = responseDaily.OrderByDescending(x => x.Date).ToList();
             return Result.Success(response);
         }
+
+        public async Task<Result<WinningHistoryReadServicModel>> GetTodayWinning(Guid userExternalId)
+        {
+            var todayWinning = new WinningHistoryReadServicModel();
+            var winningHistory = await WinningRepository.ListAsync(
+                new WinningSpecification()
+                .ByUserExternalId(userExternalId)
+                .ByTodaysWinning()
+                .WithGame()
+                );
+            todayWinning = Mapper.Map<WinningHistoryReadServicModel>(winningHistory.FirstOrDefault());
+
+            
+            return Result.Success(todayWinning);
+        }
+
+        public async Task<Result<List<WinningHistoryReadServicModel>>> GetPastWinnings(Guid userExternalId)
+        {
+            var responseDaily = new List<WinningHistoryReadServicModel>();
+            var winningHistory = await WinningRepository.ListAsync(
+                new WinningSpecification()
+                .ByUserExternalId(userExternalId)
+                .ByPastWinnings()
+                .WithGame()
+                );
+            responseDaily = Mapper.Map<List<WinningHistoryReadServicModel>>(winningHistory);
+
+            var response = responseDaily.OrderByDescending(x => x.Date).ToList();
+            return Result.Success(response);
+        }
     }
 }

@@ -32,6 +32,28 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications
             return this;
         }
 
+        public WinningSpecification ByTodaysWinning()
+        {
+            string timezoneId = "US Eastern Standard Time";
+            var now = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, timezoneId); // converted utc timezone to EST timezone
+            TimeZoneInfo targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            double offsetHours = targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours;
+            AddCriteria(s => s.Created.AddHours(offsetHours).Date.Equals(now.Date));
+
+            return this;
+        }
+
+        public WinningSpecification ByPastWinnings()
+        {
+            string timezoneId = "US Eastern Standard Time";
+            var now = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, timezoneId); // converted utc timezone to EST timezone
+            TimeZoneInfo targetTimezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            double offsetHours = targetTimezone.GetUtcOffset(DateTime.UtcNow).TotalHours;
+            AddCriteria(s => !s.Created.AddHours(offsetHours).Date.Equals(now.Date));
+
+            return this;
+        }
+
         public WinningSpecification ByExternalId(Guid externalId)
         {
             AddCriteria(t => t.ExternalId.Equals(externalId));

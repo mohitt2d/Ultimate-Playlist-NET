@@ -85,5 +85,21 @@ namespace UltimatePlaylist.MobileApi.Area.WinnerInfo
                .Finally(BuildEnvelopeResult);
         }
 
+        [HttpGet("winnings/currentWinnings")]
+        [ProducesEnvelope(typeof(WinningHistoryReadServicModel), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTodayWiining()
+        {
+            return await WinningsService.GetTodayWinning(XUserExternalId)
+               .Finally(BuildEnvelopeResult);
+        }
+
+        [HttpGet("winnings/pastWinnings")]
+        [ProducesEnvelope(typeof(List<WinningHistoryReadServicModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPastWinnings()
+        {
+            return await WinningsService.GetPastWinnings(XUserExternalId)
+               .Finally(BuildEnvelopeResult);
+        }
+
     }
 }
