@@ -77,6 +77,12 @@ namespace UltimatePlaylist.MobileApi.Validators.Idenity
                .WithMessage(ValidationMessages.CannotBeEmpty)
                .NotEqual(false)
                .WithMessage(ValidationMessages.TermsAndCoditions);
+
+            RuleFor(p => p.IsAgeAgreementRead)
+               .NotEmpty()
+               .WithMessage(ValidationMessages.CannotBeEmpty)
+               .NotEqual(false)
+               .WithMessage(ValidationMessages.OwnerAndGreater18);
         }
     }
 }

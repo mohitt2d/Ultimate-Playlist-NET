@@ -20,6 +20,8 @@
 
         public const string TermsAndCoditions = "You must accept the terms and conditions to register.";
 
+        public const string OwnerAndGreater18 = "You must accept the owner and 18 years old or older agreement to register.";
+
         public const string YouMustBeOlder = "You must be 18 or older to register.";
 
         public const string MustBeValidPin = "Must be a valid 4-digit pin.";

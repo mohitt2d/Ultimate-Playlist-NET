@@ -27,5 +27,6 @@ namespace UltimatePlaylist.Services.Common.Models.Identity
         public string ZipCode { get; set; }
 
         public bool IsTermsAndConditionsRead { get; set; }
+        public bool IsAgeAgreementRead { get; set; }
     }
 }
