@@ -155,18 +155,16 @@ namespace UltimatePlaylist.Services.Games
             return Result.Success(response);
         }
 
-        public async Task<Result<WinningHistoryReadServicModel>> GetTodayWinning(Guid userExternalId)
+        public async Task<Result<List<WinningHistoryReadServicModel>>> GetTodayWinning(Guid userExternalId)
         {
-            var todayWinning = new WinningHistoryReadServicModel();
+            var todayWinning = new List<WinningHistoryReadServicModel>();
             var winningHistory = await WinningRepository.ListAsync(
                 new WinningSpecification()
                 .ByUserExternalId(userExternalId)
                 .ByTodaysWinning()
                 .WithGame()
                 );
-            todayWinning = Mapper.Map<WinningHistoryReadServicModel>(winningHistory.FirstOrDefault());
-
-            
+            todayWinning = Mapper.Map<List<WinningHistoryReadServicModel>>(winningHistory);
             return Result.Success(todayWinning);
         }
 
