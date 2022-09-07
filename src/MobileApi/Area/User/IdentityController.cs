@@ -6,6 +6,7 @@ using AutoMapper;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using UltimatePlaylist.Common.Mvc.Attributes;
 using UltimatePlaylist.Common.Mvc.Controllers;
 using UltimatePlaylist.MobileApi.Models.Identity;
@@ -26,15 +27,17 @@ namespace UltimatePlaylist.MobileApi.Areas.User
 
         private readonly Lazy<IUserIdentityService> IdentityServiceProvider;
         private readonly Lazy<IMapper> MapperProvider;
-
+        private readonly Lazy<ILogger<IdentityController>> LoggerProvider;
         #endregion
 
         #region Constructor(s)
 
         public IdentityController(
             Lazy<IUserIdentityService> identityServiceProvider,
+            Lazy<ILogger<IdentityController>> loggerProvider,
             Lazy<IMapper> mapperProvider)
         {
+            LoggerProvider = loggerProvider;
             MapperProvider = mapperProvider;
             IdentityServiceProvider = identityServiceProvider;
         }
@@ -46,6 +49,7 @@ namespace UltimatePlaylist.MobileApi.Areas.User
         private IMapper Mapper => MapperProvider.Value;
 
         private IUserIdentityService IdentityService => IdentityServiceProvider.Value;
+        private ILogger<IdentityController> Logger => LoggerProvider.Value;
 
         #endregion
 
@@ -138,6 +142,16 @@ namespace UltimatePlaylist.MobileApi.Areas.User
 
             return await IdentityService.EmailChangedConfirmationAsync(confirmEmailChangedRequestDto)
                 .Finally(BuildEnvelopeResult);
+        }
+
+        [HttpPost("webhook-test")]
+        public async Task<bool> WebhookTest(object request)
+        {
+            Logger.LogError("===========RECEVEDV WEB HOOK+++++++++++++++++=============");
+            Logger.LogInformation(JsonConvert.SerializeObject(request));
+            Logger.LogError("===========RECEVEDV WEB HOOK+++++++++++++++++=============");
+
+            return true;
         }
 
         #endregion
