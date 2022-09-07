@@ -148,7 +148,7 @@ namespace UltimatePlaylist.MobileApi.Areas.User
         public async Task<bool> WebhookTest(object request)
         {
             Logger.LogError("===========RECEVEDV WEB HOOK+++++++++++++++++=============");
-            Logger.LogInformation(JsonConvert.SerializeObject(request));
+            Logger.LogError(JsonConvert.SerializeObject(request));
             Logger.LogError("===========RECEVEDV WEB HOOK+++++++++++++++++=============");
 
             return true;
