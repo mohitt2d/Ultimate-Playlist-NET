@@ -276,10 +276,10 @@ namespace UltimatePlaylist.Services.Analytics
              SaveAnalyticsDataWriteServiceModel saveAnalyticsDataWriteServiceModel,
              PlaylistReadServiceModel playlist)
         {
-            if (saveAnalyticsDataWriteServiceModel.EventType != AnalitycsEventType.ThirtySecondsOfSong)
+            /*if (saveAnalyticsDataWriteServiceModel.EventType != AnalitycsEventType.ThirtySecondsOfSong)
             {
                 return Result.Success(false);
-            }
+            }*/
 
             var song = playlist.Songs.FirstOrDefault(x => x.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId);
             if (song is null)
