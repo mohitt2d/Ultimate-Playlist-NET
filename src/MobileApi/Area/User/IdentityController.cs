@@ -144,16 +144,6 @@ namespace UltimatePlaylist.MobileApi.Areas.User
                 .Finally(BuildEnvelopeResult);
         }
 
-        [HttpPost("webhook-test")]
-        public async Task<bool> WebhookTest(object request)
-        {
-            Logger.LogError("===========RECEVEDV WEB HOOK+++++++++++++++++=============");
-            Logger.LogError(JsonConvert.SerializeObject(request));
-            Logger.LogError("===========RECEVEDV WEB HOOK+++++++++++++++++=============");
-
-            return true;
-        }
-
         #endregion
     }
 }
