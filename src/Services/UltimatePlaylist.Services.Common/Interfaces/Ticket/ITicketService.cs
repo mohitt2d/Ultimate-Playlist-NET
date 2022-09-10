@@ -17,5 +17,7 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Ticket
             AddTicketWriteServiceModel addTicketWriteServiceModel);
 
         Task<int> GetThirtySecondsTickets(Guid userExternalId);
+
+        Task<int> GetThirtySecondsHistoryTickets(Guid userExternalId);
     }
 }

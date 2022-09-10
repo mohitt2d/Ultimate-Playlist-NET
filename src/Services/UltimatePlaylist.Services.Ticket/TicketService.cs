@@ -93,7 +93,19 @@ namespace UltimatePlaylist.Services.Ticket
         {
             var counts = await TicketRepository.CountAsync(new TicketSpecification()
                 .WithUser()
-                .BySongHistoryUserExternalIdUsingSongRelation(userExternalId)
+                .ByUserExternalIdUsingPlaylistRelation(userExternalId)
+                .ByTodaysTickets()
+                .ByType(TicketType.Daily)
+                .ByEarnedType(TicketEarnedType.ThirtySecondsOfListenedSong)
+                .OnlyNotUsed());
+            return counts;
+        }
+
+        public async Task<int> GetThirtySecondsHistoryTickets(Guid userExternalId)
+        {
+            var counts = await TicketRepository.CountAsync(new TicketSpecification()
+                .WithUser()
+                .ByUserSongHistoryExternalId(userExternalId)
                 .ByTodaysTickets()
                 .ByType(TicketType.Daily)
                 .ByEarnedType(TicketEarnedType.ThirtySecondsOfListenedSong)

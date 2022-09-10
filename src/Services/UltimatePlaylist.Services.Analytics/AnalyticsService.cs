@@ -2,6 +2,8 @@
 
 using AutoMapper;
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using UltimatePlaylist.Common.Const;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Database.Infrastructure.Entities.Identity;
@@ -47,6 +49,8 @@ namespace UltimatePlaylist.Services.Analytics
 
         private readonly Lazy<IMapper> MapperProvider;
 
+        private readonly Lazy<ILogger<AnalyticsService>> LoggerProvider;
+
         #endregion
 
         #region Constructor(s)
@@ -62,6 +66,7 @@ namespace UltimatePlaylist.Services.Analytics
             Lazy<IRepository<UserPlaylistSongEntity>> userPlaylistSongRepositoryProvider,
             Lazy<IMapper> mapperProvider,
             Lazy<ISongSkippingDataService> songSkippingDataServiceProvider,
+            Lazy<ILogger<AnalyticsService>> loggerProvider,
             Lazy<ISongAntibotService> songAntibotServiceProvider)
         {
             UserRepositoryProvider = userRepositoryProvider;
@@ -75,6 +80,7 @@ namespace UltimatePlaylist.Services.Analytics
             MapperProvider = mapperProvider;
             SongSkippingDataServiceProvider = songSkippingDataServiceProvider;
             SongAntibotServiceProvider = songAntibotServiceProvider;
+            LoggerProvider = loggerProvider;
         }
 
         #endregion
@@ -102,6 +108,8 @@ namespace UltimatePlaylist.Services.Analytics
         private IRepository<UserPlaylistSongEntity> UserPlaylistSongRepository => UserPlaylistSongRepositoryProvider.Value;
 
         private IMapper Mapper => MapperProvider.Value;
+
+        private ILogger<AnalyticsService> Logger => LoggerProvider.Value;
 
         #endregion
 
@@ -288,9 +296,15 @@ namespace UltimatePlaylist.Services.Analytics
             }
 
             var thirtySecondTickets = await TicketService.GetThirtySecondsTickets(userExternalId);
+            var temp = await TicketService.GetThirtySecondsTickets(userExternalId);
 
             var playlistSize = playlist.Songs.Count;
             var songIndex = playlist.Songs.IndexOf(song) + 1;
+
+            Logger.LogError("=========== thirtySecondTickets =============");
+            Logger.LogError(JsonConvert.SerializeObject(saveAnalyticsDataWriteServiceModel));
+            Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}, By History: {temp} ");
+            Logger.LogError("=========== thirtySecondTickets =============");
 
             if (thirtySecondTickets >= playlistSize / 2 || playlistSize == thirtySecondTickets)
             {
