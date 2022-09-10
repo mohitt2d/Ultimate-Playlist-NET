@@ -305,7 +305,7 @@ namespace UltimatePlaylist.Services.Analytics
             Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}");
             Logger.LogError("=========== thirtySecondTickets =============");
 
-            if (thirtySecondTickets == playlistSize / 2 || playlistSize == thirtySecondTickets)
+            if (thirtySecondTickets + 1 == playlistSize / 2 || playlistSize == thirtySecondTickets + 1)
             {
                 return await TicketService.AddUserTicketAsync(
                  userExternalId,
