@@ -296,7 +296,7 @@ namespace UltimatePlaylist.Services.Analytics
             }
 
             var thirtySecondTickets = await TicketService.GetThirtySecondsTickets(userExternalId);
-            var temp = await TicketService.GetThirtySecondsTickets(userExternalId);
+            var temp = await TicketService.GetThirtySecondsHistoryTickets(userExternalId);
 
             var playlistSize = playlist.Songs.Count;
             var songIndex = playlist.Songs.IndexOf(song) + 1;
