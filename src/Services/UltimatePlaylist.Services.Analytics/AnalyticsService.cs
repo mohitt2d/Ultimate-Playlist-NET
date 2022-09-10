@@ -284,10 +284,10 @@ namespace UltimatePlaylist.Services.Analytics
              SaveAnalyticsDataWriteServiceModel saveAnalyticsDataWriteServiceModel,
              PlaylistReadServiceModel playlist)
         {
-            /*if (saveAnalyticsDataWriteServiceModel.EventType != AnalitycsEventType.ThirtySecondsOfSong)
+            if (saveAnalyticsDataWriteServiceModel.EventType != AnalitycsEventType.ThirtySecondsOfSong)
             {
                 return Result.Success(false);
-            }*/
+            }
 
             var song = playlist.Songs.FirstOrDefault(x => x.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId);
             if (song is null)
@@ -296,17 +296,16 @@ namespace UltimatePlaylist.Services.Analytics
             }
 
             var thirtySecondTickets = await TicketService.GetThirtySecondsTickets(userExternalId);
-            var temp = await TicketService.GetThirtySecondsHistoryTickets(userExternalId);
-
+            
             var playlistSize = playlist.Songs.Count;
             var songIndex = playlist.Songs.IndexOf(song) + 1;
 
             Logger.LogError("=========== thirtySecondTickets =============");
             Logger.LogError(JsonConvert.SerializeObject(saveAnalyticsDataWriteServiceModel));
-            Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}, By History: {temp} ");
+            Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}");
             Logger.LogError("=========== thirtySecondTickets =============");
 
-            if (thirtySecondTickets >= playlistSize / 2 || playlistSize == thirtySecondTickets)
+            if (thirtySecondTickets == playlistSize / 2 || playlistSize == thirtySecondTickets)
             {
                 return await TicketService.AddUserTicketAsync(
                  userExternalId,
