@@ -300,10 +300,10 @@ namespace UltimatePlaylist.Services.Analytics
             var playlistSize = playlist.Songs.Count;
             var songIndex = playlist.Songs.IndexOf(song) + 1;
 
-            Logger.LogError("=========== thirtySecondTickets =============");
+            /*Logger.LogError("=========== thirtySecondTickets =============");
             Logger.LogError(JsonConvert.SerializeObject(saveAnalyticsDataWriteServiceModel));
             Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}");
-            Logger.LogError("=========== thirtySecondTickets =============");
+            Logger.LogError("=========== thirtySecondTickets =============");*/
 
             if (thirtySecondTickets + 1 == playlistSize / 2 || playlistSize == thirtySecondTickets + 1)
             {
@@ -314,7 +314,7 @@ namespace UltimatePlaylist.Services.Analytics
                      ExternalId = saveAnalyticsDataWriteServiceModel.SongExternalId,
                      PlaylistExternalId = saveAnalyticsDataWriteServiceModel.PlaylistExternalId,
                      Type = TicketType.Jackpot,
-                     EarnedType = playlistSize / 2 == thirtySecondTickets ? TicketEarnedType.HalfOfPlaylist : TicketEarnedType.FullPlaylist,
+                     EarnedType = playlistSize / 2 == thirtySecondTickets + 1 ? TicketEarnedType.HalfOfPlaylist : TicketEarnedType.FullPlaylist,
                  }).Map(earnedTickets => false);
             }
 
