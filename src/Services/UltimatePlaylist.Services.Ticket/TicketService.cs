@@ -2,6 +2,7 @@
 
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Options;
+using System.Transactions;
 using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Const;
 using UltimatePlaylist.Common.Enums;
@@ -259,36 +260,43 @@ namespace UltimatePlaylist.Services.Ticket
             TicketType ticketType,
             TicketEarnedType ticketEarnedType)
         {
-            var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions{ IsolationLevel = IsolationLevel.Snapshot }))
+            {
+                // do something with EF here
+                var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
                .ByType(ticketType)
                .ByEarnedType(ticketEarnedType)
                .ByPlaylistSongExternalId(playlistSongEntity.ExternalId));
 
-            if (!ticketsExist)
-            {
-                var ticketList = new List<TicketEntity>();
-                var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
-
-                for (int i = 0; i < ticketsAmount; i++)
+                if (!ticketsExist)
                 {
-                    ticketList.Add(new TicketEntity()
+                    var ticketList = new List<TicketEntity>();
+                    var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
+
+                    for (int i = 0; i < ticketsAmount; i++)
                     {
-                        Type = ticketType,
-                        EarnedType = ticketEarnedType,
-                        IsUsed = false,
-                        UserPlaylistSong = playlistSongEntity,
-                    });
+                        ticketList.Add(new TicketEntity()
+                        {
+                            Type = ticketType,
+                            EarnedType = ticketEarnedType,
+                            IsUsed = false,
+                            UserPlaylistSong = playlistSongEntity,
+                        });
+                    }
+
+                    await TicketRepository.AddRangeAsync(ticketList);
                 }
 
-                await TicketRepository.AddRangeAsync(ticketList);
+                var ticketsToBadge = await GetTickets(userExternalId);
+                scope.Complete();
+                
+                return new EarnedTicketsReadServiceModel()
+                {
+                    LatestEarnedTickets = ticketsToBadge,
+                };
+                
             }
-
-            var ticketsToBadge = await GetTickets(userExternalId);
-
-            return new EarnedTicketsReadServiceModel()
-            {
-                LatestEarnedTickets = ticketsToBadge,
-            };
+            
         }
 
         private async Task<EarnedTicketsReadServiceModel> AddUltimateTicketAsync(
