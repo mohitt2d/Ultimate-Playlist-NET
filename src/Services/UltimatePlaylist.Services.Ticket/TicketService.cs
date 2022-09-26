@@ -222,7 +222,7 @@ namespace UltimatePlaylist.Services.Ticket
             TicketType ticketType,
             TicketEarnedType ticketEarnedType)
         {
-            
+            Thread.Sleep(50);
             var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
             .ByType(ticketType)
             .ByEarnedType(ticketEarnedType)
@@ -242,6 +242,7 @@ namespace UltimatePlaylist.Services.Ticket
                         IsUsed = false,
                         UserSongHistory = userSongHistoryEntity,
                     });
+                    Thread.Sleep(50);
                     /*ticketList.Add(new TicketEntity()
                     {
                         Type = ticketType,
@@ -288,6 +289,7 @@ namespace UltimatePlaylist.Services.Ticket
                         IsUsed = false,
                         UserPlaylistSong = playlistSongEntity,
                     });
+                    Thread.Sleep(50);
                     /*ticketList.Add(new TicketEntity()
                     {
                         Type = ticketType,
@@ -313,7 +315,7 @@ namespace UltimatePlaylist.Services.Ticket
               UserPlaylistSongEntity playlistSongEntity,
               TicketEarnedType ticketEarnedType)
         {
-           
+            Thread.Sleep(50);
             var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
             .ByType(TicketType.Jackpot)
             .ByEarnedType(ticketEarnedType)
@@ -333,6 +335,7 @@ namespace UltimatePlaylist.Services.Ticket
                         IsUsed = false,
                         UserPlaylistSong = playlistSongEntity,
                     });
+                    Thread.Sleep(50);
                     /*ticketList.Add(new TicketEntity()
                     {
                         Type = TicketType.Jackpot,

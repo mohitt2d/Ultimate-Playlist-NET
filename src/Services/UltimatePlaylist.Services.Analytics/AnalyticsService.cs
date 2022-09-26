@@ -207,6 +207,7 @@ namespace UltimatePlaylist.Services.Analytics
             PlaylistReadServiceModel playlistReadServiceModel,
             bool isAwardedTicketForThird = false)
         {
+            
             playlistReadServiceModel.CurrentSongExternalId = saveAnalyticsDataWriteServiceModel.SongExternalId;
 
             if (playlistReadServiceModel.State == PlaylistState.NotStartedYet)
@@ -228,7 +229,7 @@ namespace UltimatePlaylist.Services.Analytics
             }
 
             await UserPlaylistStore.Set(userExternalId, playlistReadServiceModel);
-
+            Thread.Sleep(100);
             var playlist = await UserPlaylistRepository.FirstOrDefaultAsync(new UserPlaylistSpecification()
                 .ByExternalId(saveAnalyticsDataWriteServiceModel.PlaylistExternalId)
                 .OrderByCreatedDescending()
@@ -238,13 +239,12 @@ namespace UltimatePlaylist.Services.Analytics
             {
                 // TODO:
                 playlist.State = playlistReadServiceModel.State;
-                await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-
                 foreach (var userPlaylistSong in playlist.UserPlaylistSongs)
                 {
                     userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
-                    await UserPlaylistSongRepository.UpdateAndSaveAsync(userPlaylistSong);
                 }
+                Thread.Sleep(100);
+                await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
             }
         }
 
