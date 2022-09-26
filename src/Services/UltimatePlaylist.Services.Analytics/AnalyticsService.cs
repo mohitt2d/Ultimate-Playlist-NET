@@ -236,13 +236,15 @@ namespace UltimatePlaylist.Services.Analytics
 
             if (playlist is not null)
             {
+                // TODO:
                 playlist.State = playlistReadServiceModel.State;
+                await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+
                 foreach (var userPlaylistSong in playlist.UserPlaylistSongs)
                 {
                     userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
+                    await UserPlaylistSongRepository.UpdateAndSaveAsync(userPlaylistSong);
                 }
-
-                await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
             }
         }
 
