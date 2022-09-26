@@ -222,46 +222,44 @@ namespace UltimatePlaylist.Services.Ticket
             TicketType ticketType,
             TicketEarnedType ticketEarnedType)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
+            
+            var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
+            .ByType(ticketType)
+            .ByEarnedType(ticketEarnedType)
+            .ByUserSongHistoryExternalId(userSongHistoryEntity.ExternalId));
+
+            if (!ticketsExist)
             {
-                var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
-               .ByType(ticketType)
-               .ByEarnedType(ticketEarnedType)
-               .ByUserSongHistoryExternalId(userSongHistoryEntity.ExternalId));
+                var ticketList = new List<TicketEntity>();
+                var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
 
-                if (!ticketsExist)
+                for (int i = 0; i < ticketsAmount; i++)
                 {
-                    var ticketList = new List<TicketEntity>();
-                    var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
-
-                    for (int i = 0; i < ticketsAmount; i++)
+                    await TicketRepository.AddAsync(new TicketEntity()
                     {
-                        await TicketRepository.AddAsync(new TicketEntity()
-                        {
-                            Type = ticketType,
-                            EarnedType = ticketEarnedType,
-                            IsUsed = false,
-                            UserSongHistory = userSongHistoryEntity,
-                        });
-                        /*ticketList.Add(new TicketEntity()
-                        {
-                            Type = ticketType,
-                            EarnedType = ticketEarnedType,
-                            IsUsed = false,
-                            UserSongHistory = userSongHistoryEntity,
-                        });*/
-                    }
-
-                    //await TicketRepository.AddRangeAsync(ticketList);
+                        Type = ticketType,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserSongHistory = userSongHistoryEntity,
+                    });
+                    /*ticketList.Add(new TicketEntity()
+                    {
+                        Type = ticketType,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserSongHistory = userSongHistoryEntity,
+                    });*/
                 }
 
-                var ticketsToBadge = await GetTickets(userExternalId);
-
-                return new EarnedTicketsReadServiceModel()
-                {
-                    LatestEarnedTickets = ticketsToBadge,
-                };
+                //await TicketRepository.AddRangeAsync(ticketList);
             }
+
+            var ticketsToBadge = await GetTickets(userExternalId);
+
+            return new EarnedTicketsReadServiceModel()
+            {
+                LatestEarnedTickets = ticketsToBadge,
+            };
         }
 
         private async Task<EarnedTicketsReadServiceModel> AddPlaylistSpecificTicketAsync(
@@ -270,91 +268,87 @@ namespace UltimatePlaylist.Services.Ticket
             TicketType ticketType,
             TicketEarnedType ticketEarnedType)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
-            {
-                // do something with EF here
-                var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
+            // do something with EF here
+            var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
             .ByType(ticketType)
             .ByEarnedType(ticketEarnedType)
             .ByPlaylistSongExternalId(playlistSongEntity.ExternalId));
 
-                if (!ticketsExist)
+            if (!ticketsExist)
+            {
+                var ticketList = new List<TicketEntity>();
+                var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
+
+                for (int i = 0; i < ticketsAmount; i++)
                 {
-                    var ticketList = new List<TicketEntity>();
-                    var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
-
-                    for (int i = 0; i < ticketsAmount; i++)
+                    await TicketRepository.AddAsync(new TicketEntity()
                     {
-                        await TicketRepository.AddAsync(new TicketEntity()
-                        {
-                            Type = ticketType,
-                            EarnedType = ticketEarnedType,
-                            IsUsed = false,
-                            UserPlaylistSong = playlistSongEntity,
-                        });
-                        /*ticketList.Add(new TicketEntity()
-                        {
-                            Type = ticketType,
-                            EarnedType = ticketEarnedType,
-                            IsUsed = false,
-                            UserPlaylistSong = playlistSongEntity,
-                        });*/
-                    }
-
-                    //await TicketRepository.AddRangeAsync(ticketList);
+                        Type = ticketType,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserPlaylistSong = playlistSongEntity,
+                    });
+                    /*ticketList.Add(new TicketEntity()
+                    {
+                        Type = ticketType,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserPlaylistSong = playlistSongEntity,
+                    });*/
                 }
 
-                var ticketsToBadge = await GetTickets(userExternalId);
-
-                return new EarnedTicketsReadServiceModel()
-                {
-                    LatestEarnedTickets = ticketsToBadge,
-                };
+                //await TicketRepository.AddRangeAsync(ticketList);
             }
+
+            var ticketsToBadge = await GetTickets(userExternalId);
+
+            return new EarnedTicketsReadServiceModel()
+            {
+                LatestEarnedTickets = ticketsToBadge,
+            };
+            
         }
 
         private async Task<EarnedTicketsReadServiceModel> AddUltimateTicketAsync(
               UserPlaylistSongEntity playlistSongEntity,
               TicketEarnedType ticketEarnedType)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
+           
+            var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
+            .ByType(TicketType.Jackpot)
+            .ByEarnedType(ticketEarnedType)
+            .ByPlaylistSongExternalId(playlistSongEntity.ExternalId));
+
+            if (!ticketsExist)
             {
-                var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
-               .ByType(TicketType.Jackpot)
-               .ByEarnedType(ticketEarnedType)
-               .ByPlaylistSongExternalId(playlistSongEntity.ExternalId));
+                var ticketList = new List<TicketEntity>();
+                var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
 
-                if (!ticketsExist)
+                for (int i = 0; i < ticketsAmount; i++)
                 {
-                    var ticketList = new List<TicketEntity>();
-                    var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
-
-                    for (int i = 0; i < ticketsAmount; i++)
+                    await TicketRepository.AddAsync(new TicketEntity()
                     {
-                        await TicketRepository.AddAsync(new TicketEntity()
-                        {
-                            Type = TicketType.Jackpot,
-                            EarnedType = ticketEarnedType,
-                            IsUsed = false,
-                            UserPlaylistSong = playlistSongEntity,
-                        });
-                        /*ticketList.Add(new TicketEntity()
-                        {
-                            Type = TicketType.Jackpot,
-                            EarnedType = ticketEarnedType,
-                            IsUsed = false,
-                            UserPlaylistSong = playlistSongEntity,
-                        });*/
-                    }
-
-                    //await TicketRepository.AddRangeAsync(ticketList);
+                        Type = TicketType.Jackpot,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserPlaylistSong = playlistSongEntity,
+                    });
+                    /*ticketList.Add(new TicketEntity()
+                    {
+                        Type = TicketType.Jackpot,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserPlaylistSong = playlistSongEntity,
+                    });*/
                 }
 
-                return new EarnedTicketsReadServiceModel()
-                {
-                    LatestEarnedTickets = 0,
-                };
+                //await TicketRepository.AddRangeAsync(ticketList);
             }
+
+            return new EarnedTicketsReadServiceModel()
+            {
+                LatestEarnedTickets = 0,
+            };
         }
 
         private async Task<int> GetTickets(Guid userExternalId)
