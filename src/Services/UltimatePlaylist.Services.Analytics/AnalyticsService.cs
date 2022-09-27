@@ -234,7 +234,7 @@ namespace UltimatePlaylist.Services.Analytics
                 .ByExternalId(saveAnalyticsDataWriteServiceModel.PlaylistExternalId)
                 .OrderByCreatedDescending()
                 .WithSongs());
-
+            Thread.Sleep(60);
             if (playlist is not null)
             {
                 // TODO:
@@ -243,8 +243,9 @@ namespace UltimatePlaylist.Services.Analytics
                 {
                     userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(500);
                 await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                Thread.Sleep(80);
             }
         }
 
