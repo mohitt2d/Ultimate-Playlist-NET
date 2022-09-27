@@ -237,15 +237,45 @@ namespace UltimatePlaylist.Services.Analytics
             Thread.Sleep(60);
             if (playlist is not null)
             {
-                // TODO:
-                playlist.State = playlistReadServiceModel.State;
-                foreach (var userPlaylistSong in playlist.UserPlaylistSongs)
+                try
                 {
-                    userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
+                    // TODO:
+                    playlist.State = playlistReadServiceModel.State;
+                    foreach (var userPlaylistSong in playlist.UserPlaylistSongs)
+                    {
+                        userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
+                    }
+                    Thread.Sleep(100);
+                    await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                    Thread.Sleep(80);
+                } catch (Exception ex)
+                {
+                    Logger.LogError($"ERORR line 249 on AnalyticsService.cs {ex.Message}");
+                    Thread.Sleep(200);
+                    try
+                    {
+                        await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                    }
+                    catch (Exception ex1)
+                    {
+                        Logger.LogError($"ERORR line 257 on AnalyticsService.cs {ex1.Message}");
+                        Thread.Sleep(200);
+                        try
+                        {
+                            await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                        }
+                        catch (Exception ex2)
+                        {
+                            Logger.LogError($"ERORR line 264 on AnalyticsService.cs {ex2.Message}");
+                            Thread.Sleep(200);
+                            await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+
+                        }
+
+                    }
+                    Thread.Sleep(100);
                 }
-                Thread.Sleep(500);
-                await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                Thread.Sleep(80);
+               
             }
         }
 
