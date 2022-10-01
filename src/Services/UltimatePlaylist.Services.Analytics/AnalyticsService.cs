@@ -245,7 +245,7 @@ namespace UltimatePlaylist.Services.Analytics
                     {
                         userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                     }
-                    Thread.Sleep(200);
+                    Thread.Sleep(500);
                     await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
                     Thread.Sleep(5000);
                 } catch (Exception ex)
