@@ -247,11 +247,11 @@ namespace UltimatePlaylist.Services.Analytics
                     }
                     Thread.Sleep(1000);
                     await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                 } catch (Exception ex)
                 {
                     Logger.LogError($"ERORR line 249 on AnalyticsService.cs {ex.Message}");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     try
                     {
                         await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
@@ -259,7 +259,7 @@ namespace UltimatePlaylist.Services.Analytics
                     catch (Exception ex1)
                     {
                         Logger.LogError($"ERORR line 257 on AnalyticsService.cs {ex1.Message}");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(2000);
                         try
                         {
                             await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
@@ -267,13 +267,13 @@ namespace UltimatePlaylist.Services.Analytics
                         catch (Exception ex2)
                         {
                             Logger.LogError($"ERORR line 264 on AnalyticsService.cs {ex2.Message}");
-                            Thread.Sleep(1000);
+                            Thread.Sleep(2000);
                             await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
 
                         }
 
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(2000);
                 }
                
             }
