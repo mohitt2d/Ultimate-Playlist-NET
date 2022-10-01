@@ -93,7 +93,7 @@ namespace UltimatePlaylist.MobileApi
 
             services.AddDbContext<EFContext>(options => options.UseSqlServer(connectionString, builder =>
             {
-                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
             }));
             var jwtOptions = services
                 .BindConfigurationWithValidation<AuthConfig>(Configuration, "Auth");
