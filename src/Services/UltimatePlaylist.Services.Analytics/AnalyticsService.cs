@@ -245,13 +245,13 @@ namespace UltimatePlaylist.Services.Analytics
                     {
                         userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                    Thread.Sleep(80);
+                    Thread.Sleep(5000);
                 } catch (Exception ex)
                 {
                     Logger.LogError($"ERORR line 249 on AnalyticsService.cs {ex.Message}");
-                    Thread.Sleep(200);
+                    Thread.Sleep(5000);
                     try
                     {
                         await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
@@ -259,7 +259,7 @@ namespace UltimatePlaylist.Services.Analytics
                     catch (Exception ex1)
                     {
                         Logger.LogError($"ERORR line 257 on AnalyticsService.cs {ex1.Message}");
-                        Thread.Sleep(200);
+                        Thread.Sleep(5000);
                         try
                         {
                             await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
@@ -267,7 +267,7 @@ namespace UltimatePlaylist.Services.Analytics
                         catch (Exception ex2)
                         {
                             Logger.LogError($"ERORR line 264 on AnalyticsService.cs {ex2.Message}");
-                            Thread.Sleep(200);
+                            Thread.Sleep(5000);
                             await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
 
                         }
