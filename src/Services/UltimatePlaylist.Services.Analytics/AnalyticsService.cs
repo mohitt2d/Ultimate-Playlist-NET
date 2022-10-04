@@ -174,6 +174,12 @@ namespace UltimatePlaylist.Services.Analytics
                 .Bind(async userPlaylist => await CheckIfShouldEarnTicketsForThreeSongsWithoutSkip(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist))
                 .Tap(async wasAwardedForThird => await SavePlaylistStateAsync(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist, wasAwardedForThird))
                 .Check(async _ => await AddTickets(user.ExternalId, saveAnalyticsDataWriteServiceModel));
+            /*return await PlaylistService.GetTodaysPlaylist(user.ExternalId)
+                .Tap(userPlaylistReadServiceModel => userPlaylist = userPlaylistReadServiceModel)
+                .Check(async userPlaylist => await CheckIfShouldEarnUltimateTicketsAsync(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist))
+                .Bind(async userPlaylist => await CheckIfShouldEarnTicketsForThreeSongsWithoutSkip(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist))
+                .Tap(async wasAwardedForThird => await SavePlaylistStateAsync(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist, wasAwardedForThird))
+                .Check(async _ => await AddTickets(user.ExternalId, saveAnalyticsDataWriteServiceModel));*/
         }
 
         private async Task<Result> SaveSongSkipAsync(
@@ -338,7 +344,7 @@ namespace UltimatePlaylist.Services.Analytics
             Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}");
             Logger.LogError("=========== thirtySecondTickets =============");*/
 
-            if (thirtySecondTickets + 1 == playlistSize / 2 || playlistSize == thirtySecondTickets + 1)
+            if (((thirtySecondTickets + 1) == (playlistSize / 2)) || (playlistSize == (thirtySecondTickets + 1)))
             {
                 return await TicketService.AddUserTicketAsync(
                  userExternalId,
@@ -347,7 +353,7 @@ namespace UltimatePlaylist.Services.Analytics
                      ExternalId = saveAnalyticsDataWriteServiceModel.SongExternalId,
                      PlaylistExternalId = saveAnalyticsDataWriteServiceModel.PlaylistExternalId,
                      Type = TicketType.Jackpot,
-                     EarnedType = playlistSize / 2 == thirtySecondTickets + 1 ? TicketEarnedType.HalfOfPlaylist : TicketEarnedType.FullPlaylist,
+                     EarnedType = ((playlistSize / 2) == (thirtySecondTickets + 1)) ? TicketEarnedType.HalfOfPlaylist : TicketEarnedType.FullPlaylist,
                  }).Map(earnedTickets => false);
             }
 
@@ -380,7 +386,7 @@ namespace UltimatePlaylist.Services.Analytics
                 .WithSong());
 
             return await Result.SuccessIf(userPlaylistSong is not null, ErrorMessages.SongDoesNotExist)
-                .Tap(() => userPlaylistSong!.IsFinished = true)
+                .Tap(() => userPlaylistSong!.IsFinished = true)// 2020-10-04 fixed by Mohitt
                 .Tap(async () => await UserPlaylistSongRepository.UpdateAndSaveAsync(userPlaylistSong));
         }
 
