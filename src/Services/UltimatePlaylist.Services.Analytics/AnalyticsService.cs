@@ -121,7 +121,7 @@ namespace UltimatePlaylist.Services.Analytics
         {
             return await GetUserAsync(userExternalId)
                 .Check(async user => await SaveAnalyticsDataAsync(user, saveAnalyticsDataWriteServiceModel))
-                .Map(async _ => await SongSkippingDataService.GetCurrentSkipDataAsync(saveAnalyticsDataWriteServiceModel.PlaylistExternalId, userExternalId))
+                //.Map(async _ => await SongSkippingDataService.GetCurrentSkipDataAsync(saveAnalyticsDataWriteServiceModel.PlaylistExternalId, userExternalId))
                 .Map(async skipData => Mapper.Map(skipData, await GetEarnedTicketsResponse(userExternalId)));
         }
 
@@ -380,7 +380,7 @@ namespace UltimatePlaylist.Services.Analytics
                 .WithSong());
 
             return await Result.SuccessIf(userPlaylistSong is not null, ErrorMessages.SongDoesNotExist)
-                .Tap(() => userPlaylistSong.IsFinished = true)
+                .Tap(() => userPlaylistSong!.IsFinished = true)
                 .Tap(async () => await UserPlaylistSongRepository.UpdateAndSaveAsync(userPlaylistSong));
         }
 
