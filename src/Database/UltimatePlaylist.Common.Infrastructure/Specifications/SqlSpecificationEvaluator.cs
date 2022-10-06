@@ -19,6 +19,7 @@ namespace UltimatePlaylist.Database.Infrastructure.Specifications
             return ApplySpecification(inputQuery, specification);
         }
 
+
         public IQueryable<TProjectionTarget> GetQueryWithProjection<TProjectionTarget>(
             IQueryable<T> inputQuery,
             IProjectedSpecification<T, TProjectionTarget> specification)

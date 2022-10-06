@@ -174,12 +174,6 @@ namespace UltimatePlaylist.Services.Analytics
                 .Bind(async userPlaylist => await CheckIfShouldEarnTicketsForThreeSongsWithoutSkip(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist))
                 .Tap(async wasAwardedForThird => await SavePlaylistStateAsync(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist, wasAwardedForThird))
                 .Check(async _ => await AddTickets(user.ExternalId, saveAnalyticsDataWriteServiceModel));
-            /*return await PlaylistService.GetTodaysPlaylist(user.ExternalId)
-                .Tap(userPlaylistReadServiceModel => userPlaylist = userPlaylistReadServiceModel)
-                .Check(async userPlaylist => await CheckIfShouldEarnUltimateTicketsAsync(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist))
-                .Bind(async userPlaylist => await CheckIfShouldEarnTicketsForThreeSongsWithoutSkip(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist))
-                .Tap(async wasAwardedForThird => await SavePlaylistStateAsync(user.ExternalId, saveAnalyticsDataWriteServiceModel, userPlaylist, wasAwardedForThird))
-                .Check(async _ => await AddTickets(user.ExternalId, saveAnalyticsDataWriteServiceModel));*/
         }
 
         private async Task<Result> SaveSongSkipAsync(
@@ -252,7 +246,18 @@ namespace UltimatePlaylist.Services.Analytics
                         userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                     }
                     Thread.Sleep(1000);
-                    await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                    UserPlaylistEntity _playlist = new UserPlaylistEntity
+                    {
+                        Id = playlist.Id,
+                        // Id = PlaylistService.GetMaxPlaylistIndex() + 1,
+                        StartDate = playlist.StartDate,
+                        ExternalId = playlist.ExternalId,
+                        Created = playlist.Created,
+                        Updated = DateTime.Now,
+                        IsDeleted = false
+                    };
+                    Thread.Sleep(2000);
+                    await UserPlaylistRepository.UpdateAndSaveAsync(_playlist);
                     Thread.Sleep(2000);
                 } catch (Exception ex)
                 {

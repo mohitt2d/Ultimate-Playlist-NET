@@ -15,6 +15,7 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces
         #region Set
 
         Task<TBaseEntity> AddAsync(TBaseEntity entity);
+       long GetPlaylistMaxId();
 
         Task<IEnumerable<TBaseEntity>> AddRangeAsync(IEnumerable<TBaseEntity> entity);
 

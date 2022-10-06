@@ -128,6 +128,16 @@ namespace UltimatePlaylist.Service.Playlist
                 .Map(playlist => Mapper.Map<AdminPlaylistReadServiceModel>(playlist));
         }
 
+        /// <summary>
+        /// usage : get maximun id.
+        /// 2022-10-05
+        /// </summary>
+        /// <returns></returns>
+        public long GetMaxPlaylistIndex()
+        {
+            return GetMaxIdPlaylistAsync();
+        }
+
         public async Task<Result> AddSongToPlaylistAsync(AddSongToPlaylistWriteServiceModel addSongToPlaylistWriteServiceModel)
         {
             return await GetPlaylistAsync(addSongToPlaylistWriteServiceModel.PlaylistExternalId)
@@ -274,6 +284,11 @@ namespace UltimatePlaylist.Service.Playlist
             playlist.PlaylistSongs = playlist.PlaylistSongs.Where(t => !t.IsDeleted).ToList();
 
             return Result.SuccessIf(playlist != null, playlist, ErrorType.PlaylistNotFound.ToString());
+        }
+
+        private long GetMaxIdPlaylistAsync()
+        {
+            return PlaylistRepository.GetPlaylistMaxId();
         }
 
         private async Task<Result<UserPlaylistEntity>> CreateUserPlaylistAsync(

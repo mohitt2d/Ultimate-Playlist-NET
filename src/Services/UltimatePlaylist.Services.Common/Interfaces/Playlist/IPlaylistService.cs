@@ -21,5 +21,7 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Playlist
         Task<Result> RemoveSongFromPlaylistAsync(RemoveSongFromPlaylistWriteServiceModel removeSongFromPlaylistWriteServiceModel);
 
         Task<Result> RemoveAllSongsFromPlaylistAsync(Guid playlistExternalId);
+
+        long GetMaxPlaylistIndex();//2022-10-05
     }
 }

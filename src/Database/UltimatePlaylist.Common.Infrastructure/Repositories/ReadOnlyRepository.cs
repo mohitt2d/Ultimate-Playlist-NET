@@ -83,6 +83,13 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
+
+        public virtual long GetPlaylistMaxId()
+        {
+            var baseQuery = Context.Set<TBaseEntity>().AsQueryable();
+            return baseQuery.Last().Id;
+        }
+
         public virtual async Task<TBaseEntity> SingleOrDefaultAsync(ISpecification<TBaseEntity> spec)
         {
             return await ApplySpecification(spec).SingleOrDefaultAsync();
