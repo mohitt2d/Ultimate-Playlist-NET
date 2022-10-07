@@ -246,18 +246,9 @@ namespace UltimatePlaylist.Services.Analytics
                         userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                     }
                     Thread.Sleep(1000);
-                    UserPlaylistEntity _playlist = new UserPlaylistEntity
-                    {
-                        Id = playlist.Id,
-                        // Id = PlaylistService.GetMaxPlaylistIndex() + 1,
-                        StartDate = playlist.StartDate,
-                        ExternalId = playlist.ExternalId,
-                        Created = playlist.Created,
-                        Updated = DateTime.Now,
-                        IsDeleted = false
-                    };
+                    
                     Thread.Sleep(2000);
-                    await UserPlaylistRepository.UpdateAndSaveAsync(_playlist);
+                    await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
                     Thread.Sleep(2000);
                 } catch (Exception ex)
                 {
