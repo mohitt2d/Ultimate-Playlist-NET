@@ -23,10 +23,12 @@ namespace UltimatePlaylist.Database.Infrastructure.Context
         public EFContext(DbContextOptions<EFContext> options)
             : base(options)
         {
+            this.Database.ExecuteSqlRaw("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
         }
 
         public EFContext()
         {
+            this.Database.ExecuteSqlRaw("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
         }
 
         #endregion
