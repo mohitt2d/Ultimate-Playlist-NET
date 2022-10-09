@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Transactions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UltimatePlaylist.Database.Infrastructure.Context;
@@ -47,52 +48,145 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
 
         public virtual async Task<IReadOnlyList<TBaseEntity>> ListAsync(ISpecification<TBaseEntity> spec)
         {
-            return await ApplySpecification(spec).ToListAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+
+            var result = await ApplySpecification(spec).ToListAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<IReadOnlyList<TProjectionTarget>> ListAndProjectAsync<TProjectionTarget>(IProjectedSpecification<TBaseEntity, TProjectionTarget> spec)
             where TProjectionTarget : class
         {
-            return await ApplySpecification(spec).ToListAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+
+            var result = await ApplySpecification(spec).ToListAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<IReadOnlyList<TProjectionTarget>> ListAndGroupAsync<TGrouping, TProjectionTarget>(
             IGroupedSpecification<TBaseEntity, TGrouping, TProjectionTarget> spec)
             where TProjectionTarget : class
         {
-            return await ApplySpecification(spec).ToListAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+
+            var result = await ApplySpecification(spec).ToListAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<int> CountAsync(ISpecification<TBaseEntity> spec)
         {
-            return await ApplySpecification(spec).CountAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+            var result = await ApplySpecification(spec).CountAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<TResult> MaxAsync<TResult>(ISpecification<TBaseEntity> spec, Expression<Func<TBaseEntity, TResult>> selector)
         {
-            return await ApplySpecification(spec).MaxAsync(selector);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+            var result = await ApplySpecification(spec).MaxAsync(selector);
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<bool> AnyAsync(ISpecification<TBaseEntity> spec)
         {
-            return await ApplySpecification(spec).AnyAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+            var result = await ApplySpecification(spec).AnyAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<TBaseEntity> FirstOrDefaultAsync(ISpecification<TBaseEntity> spec)
         {
-            return await ApplySpecification(spec).FirstOrDefaultAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+            var result = await ApplySpecification(spec).FirstOrDefaultAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
 
         public virtual long GetPlaylistMaxId()
         {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
             var baseQuery = Context.Set<TBaseEntity>().AsQueryable();
-            return baseQuery.Last().Id;
+            var result = baseQuery.Last().Id;
+
+            scope.Complete();
+
+            return result;
         }
 
         public virtual async Task<TBaseEntity> SingleOrDefaultAsync(ISpecification<TBaseEntity> spec)
         {
-            return await ApplySpecification(spec).SingleOrDefaultAsync();
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions()
+                {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+            var result = await ApplySpecification(spec).SingleOrDefaultAsync();
+
+            scope.Complete();
+
+            return result;
         }
 
         #endregion
@@ -103,7 +197,9 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
         {
             var baseQuery = Context.Set<TBaseEntity>().AsQueryable();
 
-            return new SqlSpecificationEvaluator<TBaseEntity>().GetQuery(baseQuery, spec);
+            var result = new SqlSpecificationEvaluator<TBaseEntity>().GetQuery(baseQuery, spec);
+
+            return result;
         }
 
         protected IQueryable<TProjectionTarget> ApplySpecification<TProjectionTarget>(IProjectedSpecification<TBaseEntity, TProjectionTarget> spec)

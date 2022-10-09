@@ -27,6 +27,8 @@ namespace UltimatePlaylist.Services.Analytics
     {
         #region Private members
 
+        private const int RetriesCount = 20;
+
         private readonly Lazy<IRepository<User>> UserRepositoryProvider;
 
         private readonly Lazy<ITicketStatsService> TicketStatsServiceProvider;
@@ -207,7 +209,7 @@ namespace UltimatePlaylist.Services.Analytics
             PlaylistReadServiceModel playlistReadServiceModel,
             bool isAwardedTicketForThird = false)
         {
-            
+
             playlistReadServiceModel.CurrentSongExternalId = saveAnalyticsDataWriteServiceModel.SongExternalId;
 
             if (playlistReadServiceModel.State == PlaylistState.NotStartedYet)
@@ -237,47 +239,32 @@ namespace UltimatePlaylist.Services.Analytics
             Thread.Sleep(60);
             if (playlist is not null)
             {
-                try
+                bool isSuccess = false;
+                var retriesCount = 0;
+
+                while ((!isSuccess) && retriesCount < RetriesCount)
                 {
-                    // TODO:
-                    playlist.State = playlistReadServiceModel.State;
-                    foreach (var userPlaylistSong in playlist.UserPlaylistSongs)
-                    {
-                        userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
-                    }
-                    Thread.Sleep(1000);
-                    
-                    Thread.Sleep(2000);
-                    await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                    Thread.Sleep(2000);
-                } catch (Exception ex)
-                {
-                    Logger.LogError($"ERORR line 249 on AnalyticsService.cs {ex.Message}");
-                    Thread.Sleep(2000);
                     try
                     {
+                        // TODO:
+                        playlist.State = playlistReadServiceModel.State;
+                        foreach (var userPlaylistSong in playlist.UserPlaylistSongs)
+                        {
+                            userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
+                        }
+
                         await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+
+                        isSuccess = true;
                     }
-                    catch (Exception ex1)
+                    catch (Exception ex)
                     {
-                        Logger.LogError($"ERORR line 257 on AnalyticsService.cs {ex1.Message}");
-                        Thread.Sleep(2000);
-                        try
-                        {
-                            await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                        }
-                        catch (Exception ex2)
-                        {
-                            Logger.LogError($"ERORR line 264 on AnalyticsService.cs {ex2.Message}");
-                            Thread.Sleep(2000);
-                            await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-
-                        }
-
+                        retriesCount++;
+                        Logger.LogError($"Exception occurred in AnalyticsService.cs {ex.Message}");
+                        Thread.Sleep(3000);
                     }
-                    Thread.Sleep(2000);
                 }
-               
+
             }
         }
 
@@ -331,7 +318,7 @@ namespace UltimatePlaylist.Services.Analytics
             }
 
             var thirtySecondTickets = await TicketService.GetThirtySecondsTickets(userExternalId);
-            
+
             var playlistSize = playlist.Songs.Count;
             var songIndex = playlist.Songs.IndexOf(song) + 1;
 
