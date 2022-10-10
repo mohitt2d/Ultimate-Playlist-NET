@@ -229,12 +229,12 @@ namespace UltimatePlaylist.Services.Analytics
             }
 
             await UserPlaylistStore.Set(userExternalId, playlistReadServiceModel);
-            Thread.Sleep(100);
+            //Thread.Sleep(100);
             var playlist = await UserPlaylistRepository.FirstOrDefaultAsync(new UserPlaylistSpecification()
                 .ByExternalId(saveAnalyticsDataWriteServiceModel.PlaylistExternalId)
                 .OrderByCreatedDescending()
                 .WithSongs());
-            Thread.Sleep(60);
+            //Thread.Sleep(60);
             if (playlist is not null)
             {
                 try
@@ -245,37 +245,38 @@ namespace UltimatePlaylist.Services.Analytics
                     {
                         userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                     }
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(1000);
                     
-                    Thread.Sleep(2000);
-                    await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                    Thread.Sleep(2000);
-                } catch (Exception ex)
+                    //Thread.Sleep(2000);
+                    await UserPlaylistRepository.UpdateAndSaveAsync(playlist, true);
+                    //Thread.Sleep(2000);
+                } 
+                catch (Exception ex)
                 {
                     Logger.LogError($"ERORR line 249 on AnalyticsService.cs {ex.Message}");
-                    Thread.Sleep(2000);
-                    try
-                    {
-                        await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                    }
-                    catch (Exception ex1)
-                    {
-                        Logger.LogError($"ERORR line 257 on AnalyticsService.cs {ex1.Message}");
-                        Thread.Sleep(2000);
-                        try
-                        {
-                            await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
-                        }
-                        catch (Exception ex2)
-                        {
-                            Logger.LogError($"ERORR line 264 on AnalyticsService.cs {ex2.Message}");
-                            Thread.Sleep(2000);
-                            await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                    //Thread.Sleep(2000);
+                    //try
+                    //{
+                    //    await UserPlaylistRepository.UpdateAndSaveAsync(playlist, true);
+                    //}
+                    //catch (Exception ex1)
+                    //{
+                    //    Logger.LogError($"ERORR line 257 on AnalyticsService.cs {ex1.Message}");
+                    //    Thread.Sleep(2000);
+                    //    try
+                    //    {
+                    //        await UserPlaylistRepository.UpdateAndSaveAsync(playlist, true);
+                    //    }
+                    //    catch (Exception ex2)
+                    //    {
+                    //        Logger.LogError($"ERORR line 264 on AnalyticsService.cs {ex2.Message}");
+                    //        Thread.Sleep(2000);
+                    //        await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
 
-                        }
+                    //    }
 
-                    }
-                    Thread.Sleep(2000);
+                    //}
+                    //Thread.Sleep(2000);
                 }
                
             }

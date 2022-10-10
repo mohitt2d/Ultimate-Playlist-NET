@@ -82,8 +82,33 @@ namespace UltimatePlaylist.Services.Song
         public async Task<Result<EarnedTicketsReadServiceModel>> RateSongAsync(Guid userExternalId, RateSongWriteServiceModel rateSongWriteServiceModel)
         {
             UserPlaylistEntity userPlaylist = default;
-
+            
             return await GetUser(userExternalId)
+                .Bind(async _ => await GetPlaylist(rateSongWriteServiceModel.PlaylistExternalId)
+                .Ensure(userPlaylistEntity => userPlaylistEntity.ExternalId == userExternalId, "hilight user!")
+                .BindWithTransactionScope(userPlaylistEntity => Result.Success(userPlaylistEntity)
+                    .Tap(userPlaylistEntity => userPlaylist = userPlaylistEntity)
+                )
+                .Bind(userPlaylistSongEntity => GetPlaylistSong(userPlaylist, rateSongWriteServiceModel.ExternalId)
+                .Ensure(userPlaylistSongEntity => userPlaylistSongEntity.ExternalId == userExternalId, "hilight user!")
+                .BindWithTransactionScope(userPlaylistSongEntity => Result.Success(userPlaylistSongEntity)
+                    .Tap(async userPlaylistSong => await AddSongRatingAsync(userPlaylistSong, rateSongWriteServiceModel.Rating))
+                )                
+                .Bind(async _ => await TicketService.AddUserTicketAsync(
+                    userExternalId,
+                    new AddTicketWriteServiceModel()
+                    {
+                        EarnedType = TicketEarnedType.Rating,
+                        ExternalId = rateSongWriteServiceModel.ExternalId,
+                        PlaylistExternalId = rateSongWriteServiceModel.PlaylistExternalId,
+                        Type = TicketType.Daily,
+                    })
+                )
+                .Tap(async _ => await UpdateUserPlaylistState(userExternalId, rateSongWriteServiceModel.ExternalId, rateSongWriteServiceModel.Rating, userPlaylist))))
+                .Tap(async _ => await SongAntibotService.ResetCounterAsync(userExternalId))
+                .Bind(async _ => await TicketStatsService.UserTicketStatsAsync(userExternalId))
+                .Map(ticketsStats => new EarnedTicketsReadServiceModel() { LatestEarnedTickets = ticketsStats.TicketsAmountForTodayDrawing });
+            /*return await GetUser(userExternalId)
                 .Bind(async _ => await GetPlaylist(rateSongWriteServiceModel.PlaylistExternalId)
                 .Tap(userPlaylistEntity => userPlaylist = userPlaylistEntity)
                 .Bind(userPlaylistEntity => GetPlaylistSong(userPlaylist, rateSongWriteServiceModel.ExternalId))
@@ -100,7 +125,7 @@ namespace UltimatePlaylist.Services.Song
                 .Tap(async _ => await UpdateUserPlaylistState(userExternalId, rateSongWriteServiceModel.ExternalId, rateSongWriteServiceModel.Rating, userPlaylist))))
                 .Tap(async _ => await SongAntibotService.ResetCounterAsync(userExternalId))
                 .Bind(async _ => await TicketStatsService.UserTicketStatsAsync(userExternalId))
-                .Map(ticketsStats => new EarnedTicketsReadServiceModel() { LatestEarnedTickets = ticketsStats.TicketsAmountForTodayDrawing });
+                .Map(ticketsStats => new EarnedTicketsReadServiceModel() { LatestEarnedTickets = ticketsStats.TicketsAmountForTodayDrawing });*/
         }
 
         #endregion
