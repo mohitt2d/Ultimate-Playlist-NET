@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using System.Transactions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UltimatePlaylist.Common.Extensions;
@@ -31,7 +32,10 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
             await Entities.AddAsync(entity);
             await Context.SaveChangesAsync();
 
-            return entity;
+            var result = entity;
+            
+
+            return result;
         }
 
         public async Task<IEnumerable<TBaseEntity>> AddRangeAsync(IEnumerable<TBaseEntity> entities)
@@ -39,7 +43,9 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
             await Entities.AddRangeAsync(entities);
             await Context.SaveChangesAsync();
 
-            return entities;
+            var result = entities;
+
+            return result;
         }
 
         public async Task<TBaseEntity> UpdateAndSaveAsync(TBaseEntity entity, bool saveChanges = true)
@@ -50,10 +56,12 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
 
             if (saveChanges)
             {
-                await Context.SaveChangesAsync();
+                 await Context.SaveChangesAsync();
             }
 
-            return entity;
+            var result = entity;
+
+            return result;
         }
 
         public async Task<IEnumerable<TBaseEntity>> UpdateAndSaveRangeAsync(IEnumerable<TBaseEntity> entities, bool saveChanges = true)
@@ -71,7 +79,9 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
                 await Context.SaveChangesAsync();
             }
 
-            return entities;
+            var result = entities;
+
+            return result;
         }
 
         public async Task DeleteAsync(ISpecification<TBaseEntity> spec)
