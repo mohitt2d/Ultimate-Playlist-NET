@@ -44,7 +44,7 @@ namespace UltimatePlaylist.Services.Analytics
         private readonly Lazy<ISongSkippingDataService> SongSkippingDataServiceProvider;
 
         private readonly Lazy<ISongAntibotService> SongAntibotServiceProvider;
-        private readonly Lazy<IPlaylistSQLRepository> PlaylistSqlRepositoryProvider;
+        private readonly Lazy<IPlaylistSQLRepository> UserPlaylistSqlRepositoryProvider;
 
         private readonly Lazy<IRepository<UserPlaylistEntity>> UserPlaylistRepositoryProvider;
 
@@ -71,7 +71,7 @@ namespace UltimatePlaylist.Services.Analytics
             Lazy<ISongSkippingDataService> songSkippingDataServiceProvider,
             Lazy<ILogger<AnalyticsService>> loggerProvider,
             Lazy<ISongAntibotService> songAntibotServiceProvider,
-            Lazy<IPlaylistSQLRepository> playlistSqlRepositoryProvider)
+            Lazy<IPlaylistSQLRepository> userPlaylistSqlRepositoryProvider)
         {
             UserRepositoryProvider = userRepositoryProvider;
             TicketStatsServiceProvider = ticketStatsServiceProvider;
@@ -84,7 +84,7 @@ namespace UltimatePlaylist.Services.Analytics
             MapperProvider = mapperProvider;
             SongSkippingDataServiceProvider = songSkippingDataServiceProvider;
             SongAntibotServiceProvider = songAntibotServiceProvider;
-            PlaylistSqlRepositoryProvider = playlistSqlRepositoryProvider;
+            UserPlaylistSqlRepositoryProvider = userPlaylistSqlRepositoryProvider;
             LoggerProvider = loggerProvider;
         }
 
@@ -111,7 +111,7 @@ namespace UltimatePlaylist.Services.Analytics
         private IRepository<UserPlaylistEntity> UserPlaylistRepository => UserPlaylistRepositoryProvider.Value;
 
         private IRepository<UserPlaylistSongEntity> UserPlaylistSongRepository => UserPlaylistSongRepositoryProvider.Value;
-        private IPlaylistSQLRepository PlaylistSqlRepository => PlaylistSqlRepositoryProvider.Value;
+        private IPlaylistSQLRepository UserPlaylistSqlRepository => UserPlaylistSqlRepositoryProvider.Value;
 
         private IMapper Mapper => MapperProvider.Value;
 
@@ -253,7 +253,7 @@ namespace UltimatePlaylist.Services.Analytics
                         {
                             userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                         }
-                        await PlaylistSqlRepository.UpdatePlaylistState(playlist.State.ToString(), playlist.Id);
+                        await UserPlaylistSqlRepository.UpdatePlaylistState(playlist.State.ToString(), playlist.Id);
 
                         isSuccess = true;
                     }
