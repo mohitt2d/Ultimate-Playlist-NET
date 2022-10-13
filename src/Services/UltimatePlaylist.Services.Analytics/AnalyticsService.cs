@@ -44,6 +44,7 @@ namespace UltimatePlaylist.Services.Analytics
         private readonly Lazy<ISongSkippingDataService> SongSkippingDataServiceProvider;
 
         private readonly Lazy<ISongAntibotService> SongAntibotServiceProvider;
+        private readonly Lazy<IPlaylistSQLRepository> PlaylistSqlRepositoryProvider;
 
         private readonly Lazy<IRepository<UserPlaylistEntity>> UserPlaylistRepositoryProvider;
 
@@ -69,7 +70,8 @@ namespace UltimatePlaylist.Services.Analytics
             Lazy<IMapper> mapperProvider,
             Lazy<ISongSkippingDataService> songSkippingDataServiceProvider,
             Lazy<ILogger<AnalyticsService>> loggerProvider,
-            Lazy<ISongAntibotService> songAntibotServiceProvider)
+            Lazy<ISongAntibotService> songAntibotServiceProvider, 
+            Lazy<IPlaylistSQLRepository> playlistSqlRepositoryProvider)
         {
             UserRepositoryProvider = userRepositoryProvider;
             TicketStatsServiceProvider = ticketStatsServiceProvider;
@@ -82,6 +84,7 @@ namespace UltimatePlaylist.Services.Analytics
             MapperProvider = mapperProvider;
             SongSkippingDataServiceProvider = songSkippingDataServiceProvider;
             SongAntibotServiceProvider = songAntibotServiceProvider;
+            PlaylistSqlRepositoryProvider = playlistSqlRepositoryProvider;
             LoggerProvider = loggerProvider;
         }
 
@@ -108,6 +111,7 @@ namespace UltimatePlaylist.Services.Analytics
         private IRepository<UserPlaylistEntity> UserPlaylistRepository => UserPlaylistRepositoryProvider.Value;
 
         private IRepository<UserPlaylistSongEntity> UserPlaylistSongRepository => UserPlaylistSongRepositoryProvider.Value;
+        private IPlaylistSQLRepository PlaylistSqlRepository => PlaylistSqlRepositoryProvider.Value;
 
         private IMapper Mapper => MapperProvider.Value;
 
@@ -253,7 +257,7 @@ namespace UltimatePlaylist.Services.Analytics
                             userPlaylistSong.IsCurrent = userPlaylistSong.Song.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId;
                         }
 
-                        await UserPlaylistRepository.UpdateAndSaveAsync(playlist);
+                        await PlaylistSqlRepository.UpdatePlaylistState(playlist.State.ToString(), playlist.Id);
 
                         isSuccess = true;
                     }
