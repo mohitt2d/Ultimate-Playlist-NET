@@ -89,7 +89,75 @@ namespace UltimatePlaylist.Services.Ticket
             return await GetUserAsync(userExternalId)
                 .Bind(async user => await AddUserTicketAsync(user, addTicketWriteServiceModel));
         }
+        //new2022-10-14-from
+        public async Task<Result<EarnedTicketsReadServiceModel>> UpdateUserTicketAsync(Guid userExternalId, UpdateTicketWriteServiceModel updateTicketWriteServiceModel)
+        {
+            return await GetUserAsync(userExternalId)
+                .Bind(async user => await UpdateUserTicketAsync(user, updateTicketWriteServiceModel));
+        }
 
+        private async Task<Result<EarnedTicketsReadServiceModel>> UpdateUserTicketAsync(User user, UpdateTicketWriteServiceModel updateTicketWriteServiceModel)
+        {
+            return await UpdateUserTicketForPlaylistActionAsync(user, updateTicketWriteServiceModel);
+        }
+
+        private async Task<Result<EarnedTicketsReadServiceModel>> UpdateUserTicketForPlaylistActionAsync(
+            User user,
+            UpdateTicketWriteServiceModel updateTicketWriteServiceModel)
+        {
+            return await GetPlaylist(updateTicketWriteServiceModel.PlaylistExternalId)
+                .Bind(playlist => GetPlaylistSong(playlist, updateTicketWriteServiceModel.ExternalId))
+                .Tap(async userPlaylistSong => await GetOrAddUserSongHistoryAsync(user, userPlaylistSong.Song))
+                .Map(async userPlaylistSong => await UpdatePlaylistSpecificTicketAsync(
+                    user.ExternalId,
+                    userPlaylistSong,
+                    updateTicketWriteServiceModel.Type,
+                    updateTicketWriteServiceModel.EarnedType,
+                    updateTicketWriteServiceModel.IsErrorTriggered));
+        }
+
+        private async Task<EarnedTicketsReadServiceModel> UpdatePlaylistSpecificTicketAsync(
+            Guid userExternalId,
+            UserPlaylistSongEntity playlistSongEntity,
+            TicketType ticketType,
+            TicketEarnedType ticketEarnedType,
+            int isErrorTriggered)
+        {
+            // do something with EF here
+            var ticketsExist = await TicketRepository.AnyAsync(new TicketSpecification()
+            .ByType(ticketType)
+            .ByEarnedType(ticketEarnedType)
+            .ByPlaylistSongExternalId(playlistSongEntity.ExternalId));
+
+            if (!ticketsExist)
+            {
+                var ticketList = new List<TicketEntity>();
+                var ticketsAmount = EarnedTicketsAmountByEarnedType(ticketEarnedType);
+
+                for (int i = 0; i < ticketsAmount; i++)
+                {
+                    await TicketRepository.AddAsync(new TicketEntity()
+                    {
+                        Type = ticketType,
+                        EarnedType = ticketEarnedType,
+                        IsUsed = false,
+                        UserPlaylistSong = playlistSongEntity,
+                        IsErrorTriggered = isErrorTriggered
+                    });
+                    Thread.Sleep(50);
+                }
+            }
+
+            var ticketsToBadge = await GetTickets(userExternalId);
+
+            return new EarnedTicketsReadServiceModel()
+            {
+                LatestEarnedTickets = ticketsToBadge,
+            };
+
+        }
+
+        //new2022-10-14-to
         public async Task<int> GetThirtySecondsTickets(Guid userExternalId)
         {
             var counts = await TicketRepository.CountAsync(new TicketSpecification()

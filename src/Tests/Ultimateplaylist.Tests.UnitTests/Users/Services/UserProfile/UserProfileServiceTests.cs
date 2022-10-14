@@ -70,6 +70,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Users.Services.UserProfile
                 new Lazy<IMapper>(userProfileServicesMock.MapperMock.Object),
                 userProfileServicesMock.EmailConfig,
                 new Lazy<IBackgroundJobClient>(userProfileServicesMock.BackgroundJobClientMock.Object),
+                new Database.Infrastructure.Context.EFContext(),
                 new Lazy<IUserBlacklistTokenStore>(userProfileServicesMock.UserBlacklistTokenStoreMock.Object));
 
             // Act
@@ -136,6 +137,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Users.Services.UserProfile
                 new Lazy<IMapper>(userProfileServicesMock.MapperMock.Object),
                 userProfileServicesMock.EmailConfig,
                 new Lazy<IBackgroundJobClient>(userProfileServicesMock.BackgroundJobClientMock.Object),
+                new Database.Infrastructure.Context.EFContext(),
                 new Lazy<IUserBlacklistTokenStore>(userProfileServicesMock.UserBlacklistTokenStoreMock.Object));
 
             // Act
@@ -189,6 +191,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Users.Services.UserProfile
                 new Lazy<IMapper>(userProfileServicesMock.MapperMock.Object),
                 userProfileServicesMock.EmailConfig,
                 new Lazy<IBackgroundJobClient>(userProfileServicesMock.BackgroundJobClientMock.Object),
+                new Database.Infrastructure.Context.EFContext(),
                 new Lazy<IUserBlacklistTokenStore>(userProfileServicesMock.UserBlacklistTokenStoreMock.Object));
 
             // Act
@@ -246,6 +249,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Users.Services.UserProfile
                 new Lazy<IMapper>(userProfileServicesMock.MapperMock.Object),
                 userProfileServicesMock.EmailConfig,
                 new Lazy<IBackgroundJobClient>(userProfileServicesMock.BackgroundJobClientMock.Object),
+                new Database.Infrastructure.Context.EFContext(), 
                 new Lazy<IUserBlacklistTokenStore>(userProfileServicesMock.UserBlacklistTokenStoreMock.Object));
 
             // Act

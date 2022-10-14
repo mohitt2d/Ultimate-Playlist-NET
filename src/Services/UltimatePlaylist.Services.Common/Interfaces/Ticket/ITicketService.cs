@@ -15,7 +15,11 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Ticket
         Task<Result<EarnedTicketsReadServiceModel>> AddUserTicketAsync(
             Guid userExternalId,
             AddTicketWriteServiceModel addTicketWriteServiceModel);
-
+        //new2022-10-14-from
+        Task<Result<EarnedTicketsReadServiceModel>> UpdateUserTicketAsync(
+            Guid userExternalId,
+            UpdateTicketWriteServiceModel updateTicketWriteServiceModel);
+        //new2022-10-14-to
         Task<int> GetThirtySecondsTickets(Guid userExternalId);
 
         Task<int> GetThirtySecondsHistoryTickets(Guid userExternalId);

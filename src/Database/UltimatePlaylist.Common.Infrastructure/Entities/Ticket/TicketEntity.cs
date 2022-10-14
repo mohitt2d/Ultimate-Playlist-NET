@@ -31,6 +31,8 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Ticket
 
         public virtual UserPlaylistSongEntity UserPlaylistSong { get; set; }
 
+        public int? IsErrorTriggered { get; set; }
+
         #endregion
     }
 }

@@ -119,7 +119,54 @@ namespace UltimatePlaylist.Services.Ticket
 
             return ticketsStatsReadServiceModel;
         }
+        //new2022-10-14-from
+        public async Task<Result<int?>> ReverseTicketStatus(Guid ExternalId, int isErrorTriggered)
+        {
+            return await GetTicket(ExternalId)
+                .Tap(ticket => ChangeErrorTriggered(ticket, isErrorTriggered))
+                .Tap(async ticket => await TicketRepository.UpdateAndSaveAsync(ticket))
+                .Map(ticket => ticket.IsErrorTriggered);
+        }
 
+        public async Task<Result<int>> ReverseTicketsStatus(long ExternalId, int isErrorTriggered)
+        {
+           return await GetTickets(ExternalId)
+                 .Tap(tickets => ChangeErrorsTriggered(tickets, isErrorTriggered))
+                 .Tap(async tickets => await TicketRepository.UpdateAndSaveRangeAsync(tickets))
+                 .Map(tickets => tickets.Count);
+        }
+
+        private async Task<Result<TicketEntity>> GetTicket(Guid ExternalId)
+        {
+            var ticket = await TicketRepository.FirstOrDefaultAsync(new TicketSpecification()
+                .ByExternalId(ExternalId));
+
+            return Result.SuccessIf(ticket != null, ErrorType.CannotFindTicket.ToString())
+                .Map(() => ticket);
+        }
+
+        private async Task<Result<IReadOnlyList<TicketEntity>>> GetTickets(long ExternalId)
+        {
+            var tickets = await TicketRepository.ListAsync(new TicketSpecification()
+                .ByUserPlaylistSongId(ExternalId));
+
+            return Result.SuccessIf(tickets != null, ErrorType.CannotFindTicket.ToString())
+                .Map(() => tickets);
+        }
+
+        private void ChangeErrorTriggered(TicketEntity ticket, int isErrorTriggered)
+        {
+            ticket.IsErrorTriggered = isErrorTriggered;
+        }
+
+        private void ChangeErrorsTriggered(IReadOnlyList<TicketEntity> tickets, int isErrorTriggered)
+        {
+            for(int i = 0; i < tickets.Count; i++)
+            {
+                tickets[i].IsErrorTriggered = isErrorTriggered;
+            }
+        }
+        //new2022-10-14-to
         #endregion
     }
 }

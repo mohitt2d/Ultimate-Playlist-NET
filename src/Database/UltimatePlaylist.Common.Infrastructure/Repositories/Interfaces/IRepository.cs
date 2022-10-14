@@ -18,7 +18,6 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces
        long GetPlaylistMaxId();
 
         Task<IEnumerable<TBaseEntity>> AddRangeAsync(IEnumerable<TBaseEntity> entity);
-
         Task<TBaseEntity> UpdateAndSaveAsync(TBaseEntity entity, bool saveChanges = true);
 
         Task<IEnumerable<TBaseEntity>> UpdateAndSaveRangeAsync(IEnumerable<TBaseEntity> entities, bool saveChanges = true);

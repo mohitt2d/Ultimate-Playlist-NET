@@ -62,6 +62,7 @@
         CannotRemoveUserPin,
         CannotGetSongs,
         CannotAddTicket,
+        CannotFindTicket,
         CannotAddUserTicketHistory,
         CannotAddUserSongHistory,
         PlaylistNotFound,

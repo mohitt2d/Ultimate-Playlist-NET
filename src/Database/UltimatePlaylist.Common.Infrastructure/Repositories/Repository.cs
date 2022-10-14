@@ -37,7 +37,6 @@ namespace UltimatePlaylist.Database.Infrastructure.Repositories
 
             return result;
         }
-
         public async Task<IEnumerable<TBaseEntity>> AddRangeAsync(IEnumerable<TBaseEntity> entities)
         {
             await Entities.AddRangeAsync(entities);

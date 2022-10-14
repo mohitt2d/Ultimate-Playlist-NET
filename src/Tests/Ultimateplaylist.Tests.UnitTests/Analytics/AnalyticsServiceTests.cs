@@ -79,6 +79,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Analytics
                 new Lazy<IRepository<UserPlaylistSongEntity>>(UserPlaylistSongRepositoryMock.Object),
                 new Lazy<IMapper>(MockedMapper.Object),
                 new Lazy<ISongSkippingDataService>(SongSkippingDataServiceMock.Object),
+                new Lazy<Microsoft.Extensions.Logging.ILogger<AnalyticsService>>(),
                 new Lazy<ISongAntibotService>(SongAntibotServiceMock.Object));
         }
 

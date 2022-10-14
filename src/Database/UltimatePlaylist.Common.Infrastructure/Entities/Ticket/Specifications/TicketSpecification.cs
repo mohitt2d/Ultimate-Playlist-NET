@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using System;
+using System.Linq;
 using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Database.Infrastructure.Specifications;
@@ -24,6 +25,13 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Ticket.Specification
         #endregion
 
         #region Filters
+
+        public TicketSpecification ByExternalId(Guid externalId)
+        {
+            AddCriteria(s => s.ExternalId == externalId);
+
+            return this;
+        }
 
         public TicketSpecification ByExternalIds(Guid[] externalIds)
         {
@@ -99,6 +107,12 @@ namespace UltimatePlaylist.Database.Infrastructure.Entities.Ticket.Specification
         {
             AddCriteria(s => s.UserPlaylistSong.ExternalId == playlistSongExternalId);
 
+            return this;
+        }
+
+        public TicketSpecification ByUserPlaylistSongId(long userPlaylistSongId)
+        {
+            AddCriteria(s => s.UserPlaylistSongId == userPlaylistSongId);
             return this;
         }
 
