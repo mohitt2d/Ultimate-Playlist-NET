@@ -19,4 +19,11 @@ namespace UltimatePlaylist.MobileApi.Models.Ticket
 
         public int IsErrorTriggered { get; set; }
     }
+
+    public class UserTicketStatsRequestModel
+    {
+        public int? IsErrorTriggered { get; set; }
+        public long UserPlaylistSongId { get; set; }
+    }
+
 }//new2022-10-14-here

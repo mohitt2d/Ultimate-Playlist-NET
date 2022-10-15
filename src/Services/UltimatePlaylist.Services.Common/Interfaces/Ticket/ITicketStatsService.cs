@@ -13,5 +13,6 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Ticket
 
         Task<Result<int?>> ReverseTicketStatus(Guid userExternalId, int isErrorTriggered);
         Task<Result<int>> ReverseTicketsStatus(long userPlaylistSongId, int isErrorTriggered);
+        Task<Result<int?>> UserTicketStatus(long userPlaylistSongId);
     }
 }

@@ -3,6 +3,7 @@
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
+using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Common.Mvc.Attributes;
 using UltimatePlaylist.Common.Mvc.Controllers;
@@ -76,6 +77,16 @@ namespace UltimatePlaylist.MobileApi.Area.Ticket
         {
             return await TicketService.ReverseTicketsStatus(model.UserPlaylistSongId, model.IsErrorTriggered)
                 .Map(isErrorTriggered => new TicketStatsRequestModel() { IsErrorTriggered = model.IsErrorTriggered })
+                .Finally(BuildEnvelopeResult);
+        }
+
+        [HttpGet("userStatus/{userId}")]
+        [ProducesEnvelope(typeof(UserTicketStatsRequestModel), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UserTicketStatus(int userId)
+        {
+            string v = XToken;
+            return await TicketService.UserTicketStatus(userId)
+                .Map(isErrorTriggered => new UserTicketStatsRequestModel() { IsErrorTriggered = isErrorTriggered })
                 .Finally(BuildEnvelopeResult);
         }
 

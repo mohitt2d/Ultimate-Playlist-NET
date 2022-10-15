@@ -136,6 +136,21 @@ namespace UltimatePlaylist.Services.Ticket
                  .Map(tickets => tickets.Count);
         }
 
+        public async Task<Result<int?>> UserTicketStatus(long userPlaylistSongId)
+        {
+            return await GetTicketStatus(userPlaylistSongId)
+                .Map(ticket => ticket.IsErrorTriggered);
+        }
+
+        private async Task<Result<TicketEntity>> GetTicketStatus(long userPlaylistSongId)
+        {
+            var ticket = await TicketRepository.FirstOrDefaultAsync(new TicketSpecification()
+                .ByUserPlaylistSongId(userPlaylistSongId));
+
+            return Result.SuccessIf(ticket != null, ErrorType.CannotFindTicket.ToString())
+                .Map(() => ticket);
+        }
+
         private async Task<Result<TicketEntity>> GetTicket(Guid ExternalId)
         {
             var ticket = await TicketRepository.FirstOrDefaultAsync(new TicketSpecification()
