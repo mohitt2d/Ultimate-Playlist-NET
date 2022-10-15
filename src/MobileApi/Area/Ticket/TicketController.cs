@@ -70,7 +70,9 @@ namespace UltimatePlaylist.MobileApi.Area.Ticket
                })
                .Finally(BuildEnvelopeResult);
         }
+
         //new2022-10-14-from
+
         [HttpPost("popupStatus")]
         [ProducesEnvelope(typeof(TicketStatsRequestModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> ChangeTicketsStatus([FromBody] TicketsStatsRequestModel model)
@@ -90,15 +92,6 @@ namespace UltimatePlaylist.MobileApi.Area.Ticket
                 .Finally(BuildEnvelopeResult);
         }
 
-        /*
-        public async Task<IActionResult> ChangeTicketStatus([FromBody] TicketStatsRequestModel model)
-        {
-            return await TicketService.ReverseTicketStatus(model.ExternalId, model.IsErrorTriggered)
-                .Map(isErrorTriggered => new TicketStatsRequestModel() { IsErrorTriggered = model.IsErrorTriggered })
-                .Finally(BuildEnvelopeResult);
-        }
-
-        */
         //new2022-10-14-to
 
         #endregion
