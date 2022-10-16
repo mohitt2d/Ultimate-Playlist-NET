@@ -46,7 +46,7 @@ namespace UltimatePlaylist.AdminApi.Area.Admin
         [ProducesEnvelope(typeof(UserTicketStatsRequestModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> UserTicketStatus(string token)
         {
-            string x = IdentityService.GetUserId(token.Replace("%20", ""));
+            string x = IdentityService.GetUserId(token.Replace("%20", ""));// remove space letter from token
             long id = long.Parse(x, System.Globalization.NumberStyles.AllowThousands | System.Globalization.NumberStyles.AllowLeadingSign);
             return await TicketService.UserTicketStatus(id)
                 .Map(isErrorTriggered => new UserTicketStatsRequestModel() { IsErrorTriggered = isErrorTriggered })
