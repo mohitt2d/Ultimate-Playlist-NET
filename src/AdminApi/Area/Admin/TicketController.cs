@@ -34,7 +34,7 @@ namespace UltimatePlaylist.AdminApi.Area.Admin
         [ProducesEnvelope(typeof(TicketStatsRequestModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> ChangeTicketsStatus([FromBody] TicketsStatsRequestModel model)
         {
-            string x = IdentityService.GetUserId(model.UserPlaylistSongId);
+            string x = IdentityService.GetUserId(model.UserPlaylistSongId.Replace("%20", ""));
             long id = long.Parse(x, System.Globalization.NumberStyles.AllowThousands | System.Globalization.NumberStyles.AllowLeadingSign);
 
             return await TicketService.ReverseTicketsStatus(id, model.IsErrorTriggered)
@@ -46,7 +46,7 @@ namespace UltimatePlaylist.AdminApi.Area.Admin
         [ProducesEnvelope(typeof(UserTicketStatsRequestModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> UserTicketStatus(string token)
         {
-            string x = IdentityService.GetUserId(token);
+            string x = IdentityService.GetUserId(token.Replace("%20", ""));
             long id = long.Parse(x, System.Globalization.NumberStyles.AllowThousands | System.Globalization.NumberStyles.AllowLeadingSign);
             return await TicketService.UserTicketStatus(id)
                 .Map(isErrorTriggered => new UserTicketStatsRequestModel() { IsErrorTriggered = isErrorTriggered })
