@@ -94,7 +94,7 @@ namespace UltimatePlaylist.Services.Identity.Services
         public string GetUserId(string token)
         {
             var principalClaims = GetPrincipalFromToken(token);
-            var userIdClaim = principalClaims.FindFirst(JwtClaims.ExternalId)?.Value;
+            var userIdClaim = principalClaims.FindFirst(JwtClaims.Id)?.Value;
             return userIdClaim;
         }
 
@@ -103,7 +103,7 @@ namespace UltimatePlaylist.Services.Identity.Services
             var principalClaims = GetPrincipalFromToken(token);
             var userIdClaim = principalClaims.FindFirst(JwtClaims.ExternalId)?.Value;
             var userEmailClaim = principalClaims.FindFirst(JwtClaims.Email)?.Value;
-            var userId = new Guid(userIdClaim).Decode(userEmailClaim);
+            var userId = new Guid(userIdClaim!).Decode(userEmailClaim!);
 
             var user = await UserManager.Users.FirstOrDefaultAsync(u => u.ExternalId.Equals(userId));
             if (user is null)
@@ -355,6 +355,7 @@ namespace UltimatePlaylist.Services.Identity.Services
                 new Claim(JwtClaims.Email, user.Email),
                 new Claim(JwtClaims.ExternalId, user.ExternalId.Encode(user.Email).ToString()),
                 new Claim(JwtClaims.IsPinRequired, (!string.IsNullOrEmpty(user.Pin)).ToString(), ClaimValueTypes.Boolean),
+                new Claim(JwtClaims.Id, user.Id.ToString()),
             };
 
             claims.AddRange(await UserManager.GetClaimsAsync(user));

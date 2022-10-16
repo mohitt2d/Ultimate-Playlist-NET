@@ -8,6 +8,8 @@ namespace UltimatePlaylist.Common.Config
 {
     public static class JwtClaims
     {
+        public const string Id = "Id";
+
         public const string Role = ClaimTypes.Role;
 
         public const string Email = ClaimTypes.Email;
