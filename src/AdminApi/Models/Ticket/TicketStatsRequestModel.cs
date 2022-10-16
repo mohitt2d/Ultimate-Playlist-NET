@@ -9,7 +9,7 @@
 
     public class TicketsStatsRequestModel
     {
-        public long UserPlaylistSongId { get; set; }
+        public string UserPlaylistSongId { get; set; }
 
         public int IsErrorTriggered { get; set; }
     }
