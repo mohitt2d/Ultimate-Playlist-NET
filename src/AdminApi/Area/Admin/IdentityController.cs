@@ -55,6 +55,7 @@ namespace UltimatePlaylist.AdminApi.Area.Admin
         [ProducesEmptyEnvelope(StatusCodes.Status200OK)]
         public async Task<IActionResult> PasswordResetAsync([FromQuery] SendResetPasswordRequestModel request)
         {
+            var id = IdentityService.GetUserId("Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkBlbGl0ZXNob3V0LmNvbSIsImV4dGVybmFsSWQiOiIxMjg2ZGI0ZC1kZGNiLWEwZDgtYmMyMi01YjFhOGYwOTc1NjciLCJpc1BpblJlcXVpcmVkIjpmYWxzZSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsImV4cCI6MTY2NTg5MDI0MCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMyJ9.pL_rDSeeGn4cfA-HWgXILqpzxJJFOFVqjNtN2ckVxLk");
             return await IdentityService.ResetPasswordAsync(request.Email)
                 .Finally(BuildEnvelopeResult);
         }

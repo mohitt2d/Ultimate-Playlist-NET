@@ -10,6 +10,7 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Identity
 {
     public interface IAdministratorIdentityService
     {
+        string GetUserId(string token);
         Task<Result<AuthenticationReadServiceModel>> LoginAsync(UserLoginWriteServiceModel userLoginWriteServiceModel);
 
         Task<Result<AuthenticationReadServiceModel>> ChangePasswordAsync(ChangePasswordWriteServiceModel request);

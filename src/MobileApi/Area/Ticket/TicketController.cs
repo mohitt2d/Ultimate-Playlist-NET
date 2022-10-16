@@ -25,7 +25,8 @@ namespace UltimatePlaylist.MobileApi.Area.Ticket
 
         private readonly Lazy<IMapper> MapperProvider;
         private readonly Lazy<ITicketStatsService> TicketServiceServiceProvider;
-
+        private readonly AuthConfig Config;
+        
         #endregion
 
         #region Constructor(s)
@@ -86,11 +87,11 @@ namespace UltimatePlaylist.MobileApi.Area.Ticket
         [ProducesEnvelope(typeof(UserTicketStatsRequestModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> UserTicketStatus(int userId)
         {
-            string v = XToken;
             return await TicketService.UserTicketStatus(userId)
                 .Map(isErrorTriggered => new UserTicketStatsRequestModel() { IsErrorTriggered = isErrorTriggered })
                 .Finally(BuildEnvelopeResult);
         }
+
 
         //new2022-10-14-to
 

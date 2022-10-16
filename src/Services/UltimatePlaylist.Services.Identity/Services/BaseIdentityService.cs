@@ -91,6 +91,13 @@ namespace UltimatePlaylist.Services.Identity.Services
 
         #region Public methods
 
+        public string GetUserId(string token)
+        {
+            var principalClaims = GetPrincipalFromToken(token);
+            var userIdClaim = principalClaims.FindFirst(JwtClaims.ExternalId)?.Value;
+            return userIdClaim;
+        }
+
         public async Task<Result<AuthenticationReadServiceModel>> RefreshAsync(string token, string refreshToken)
         {
             var principalClaims = GetPrincipalFromToken(token);
