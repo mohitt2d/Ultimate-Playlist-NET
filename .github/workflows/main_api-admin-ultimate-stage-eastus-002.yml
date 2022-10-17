@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'api-admin-ultimate-stage-eastus-002'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F04D69514C8D40938881B95C9EE8199C }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F74F66974E24FF48E56B9F319692629 }}
           package: .
