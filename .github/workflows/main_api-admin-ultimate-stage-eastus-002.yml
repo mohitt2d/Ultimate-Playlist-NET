@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - api-admin-ultimate-stage-eastus-002
+name: Build and deploy ASP.Net Core app to Azure Web App - api-mobile-ultimate-stage-eastus-002
 
 on:
   push:
@@ -12,7 +12,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
+    defaults:
+      run:
+        working-directory: ./src/AdminApi
     steps:
       - uses: actions/checkout@v2
 
@@ -21,7 +23,7 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
-
+      
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -29,7 +31,7 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.0.0
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
@@ -40,7 +42,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
