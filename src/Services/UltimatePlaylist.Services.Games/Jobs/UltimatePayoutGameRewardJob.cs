@@ -76,6 +76,10 @@ namespace UltimatePlaylist.Services.Games.Jobs
                 else
                 {
                     currentGame.Reward += GamesConfig.UltimateIncrementReward;
+                    /*+ (monthsSinceLastWinner
+                    ? GamesConfig.UltimateIncrementReward * monthsSinceLastWinner
+                    : GamesConfig.UltimateIncrementReward * monthsSinceLaunch);*/
+
                     await UltimatePayoutRepository.UpdateAndSaveAsync(currentGame);
                 }
             }

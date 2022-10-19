@@ -64,6 +64,7 @@ namespace UltimatePlaylist.MobileApi.Area.Ticket
         [ProducesEnvelope(typeof(LastEarnedNotDisplayedTicketsResponseModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetLatEarnedTicketsNotDiasplayed()
         {
+            int s = 0;
             return await TicketService.UserTicketStatsAsync(XUserExternalId)
                .Map(tickets => new LastEarnedNotDisplayedTicketsResponseModel()
                {

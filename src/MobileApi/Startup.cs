@@ -247,21 +247,13 @@ namespace UltimatePlaylist.MobileApi
             app.SetupSwaggerAndHealth(ApiType.Mobile, Configuration.GetValue<bool>("EnableSwagger"));
             app.SetupHangfire();
             app.SetupApi();
-
-            /*NotificationBeforeGamesScheduler.RemoveNotificationBeforeGamesJobs(recurringJobManager);
-            NotificationAfterGamesScheduler.RemoveNotificationAfterGamesJobs(recurringJobManager);
-            NotificationReminderScheduler.RemoveReminderNotificationJobs(recurringJobManager);*/
-
+            /*
             DailyCashDrawingScheduler.RemoveDaliCashDrawingJobs(recurringJobManager);
             UltimatePayoutGameScheduler.RemoveUltimatePayoutJob(recurringJobManager);
             UltimatePayoutGameRewardScheduler.RemoveUltimatePayoutGameRewardJob(recurringJobManager);
-
+            */
             if (gamesConfig.Value.RunGames)
             {
-                /*NotificationBeforeGamesScheduler.ScheduleForNotificationsBeforeGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
-                NotificationAfterGamesScheduler.ScheduleForNotificationsAfterGames(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);
-                NotificationReminderScheduler.ScheduleForReminderNotifications(recurringJobManager, notificationConfig.Value, gamesConfig.Value, playlistConfig.Value);*/
-
                 UltimatePayoutGameRewardScheduler.ScheduleUltimatePayoutGameRewardJob(recurringJobManager, playlistConfig.Value.TimeZone);
                 DailyCashDrawingScheduler.SchedulealiCashDrawingJob(recurringJobManager, gamesConfig.Value, playlistConfig.Value);
                 UltimatePayoutGameScheduler.ScheduleUltimatePayoutJob(recurringJobManager, gamesConfig.Value, playlistConfig.Value);
