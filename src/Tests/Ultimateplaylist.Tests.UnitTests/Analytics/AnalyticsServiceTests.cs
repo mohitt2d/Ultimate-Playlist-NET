@@ -39,6 +39,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Analytics
         private readonly IAnalyticsService AnalyticsService;
         private readonly Mock<ISongSkippingDataService> SongSkippingDataServiceMock;
         private readonly Mock<ISongAntibotService> SongAntibotServiceMock;
+        private readonly Mock<IPlaylistSQLRepository> PlaylistSQLRepositoryMock;
 
         public AnalyticsServiceTests()
         {
@@ -51,6 +52,7 @@ namespace UltimatePlaylist.Tests.UnitTests.Analytics
             UserPlaylistRepositoryMock = new Mock<IRepository<UserPlaylistEntity>>();
             UserPlaylistSongRepositoryMock = new Mock<IRepository<UserPlaylistSongEntity>>();
             SongAntibotServiceMock = new Mock<ISongAntibotService>();
+            PlaylistSQLRepositoryMock = new Mock<IPlaylistSQLRepository>();
 
             MockedMapper = new Mock<IMapper>();
             SongSkippingDataServiceMock = new Mock<ISongSkippingDataService>();
@@ -80,7 +82,8 @@ namespace UltimatePlaylist.Tests.UnitTests.Analytics
                 new Lazy<IMapper>(MockedMapper.Object),
                 new Lazy<ISongSkippingDataService>(SongSkippingDataServiceMock.Object),
                 new Lazy<Microsoft.Extensions.Logging.ILogger<AnalyticsService>>(),
-                new Lazy<ISongAntibotService>(SongAntibotServiceMock.Object));
+                new Lazy<ISongAntibotService>(SongAntibotServiceMock.Object),
+                new Lazy<IPlaylistSQLRepository>(PlaylistSQLRepositoryMock.Object));
         }
 
         [Fact]

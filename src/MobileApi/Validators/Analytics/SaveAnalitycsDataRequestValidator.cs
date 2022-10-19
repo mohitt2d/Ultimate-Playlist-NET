@@ -18,31 +18,31 @@ namespace UltimatePlaylist.MobileApi.Validators.Analytics
 
         public SaveAnalitycsDataRequestValidator()
         {
-            RuleFor(p => p.Params)
-                .NotEmpty()
-                .WithMessage(ValidationMessages.CannotBeEmpty);
+            //RuleFor(p => p.Params)
+            //    .NotEmpty()
+            //    .WithMessage(ValidationMessages.CannotBeEmpty);
 
-            RuleFor(p => p.EventType)
-                .NotEmpty()
-                .WithMessage(ValidationMessages.CannotBeEmpty)
-                .MustValueInEnum<SaveAnalyticsDataRequestModel, AnalitycsEventType>();
+            //RuleFor(p => p.EventType)
+            //    .NotEmpty()
+            //    .WithMessage(ValidationMessages.CannotBeEmpty)
+            //    .MustValueInEnum<SaveAnalyticsDataRequestModel, AnalitycsEventType>();
 
-            RuleFor(p => GetValueFromDictionary(p.Params, "SongExternalId"))
-                .MustBeGuid()
-                .WithName("SongExternalId");
+            //RuleFor(p => GetValueFromDictionary(p.Params, "SongExternalId"))
+            //    .MustBeGuid()
+            //    .WithName("SongExternalId");
 
-            RuleFor(p => GetValueFromDictionary(p.Params, "PlaylistExternalId"))
-                .MustBeGuid()
-                .WithName("PlaylistExternalId");
+            //RuleFor(p => GetValueFromDictionary(p.Params, "PlaylistExternalId"))
+            //    .MustBeGuid()
+            //    .WithName("PlaylistExternalId");
 
-            When(p => CheckIfActualListeningSecondRequired(p.EventType), () =>
-            {
-                RuleFor(p => GetValueFromDictionary(p.Params, "ActualListeningSecond"))
-                 .NotEmpty()
-                 .WithMessage(ValidationMessages.CannotBeEmpty)
-                 .MustBeDigits()
-                 .WithName("ActualListeningSecond");
-            });
+            //When(p => CheckIfActualListeningSecondRequired(p.EventType), () =>
+            //{
+            //    RuleFor(p => GetValueFromDictionary(p.Params, "ActualListeningSecond"))
+            //     .NotEmpty()
+            //     .WithMessage(ValidationMessages.CannotBeEmpty)
+            //     .MustBeDigits()
+            //     .WithName("ActualListeningSecond");
+            //});
         }
 
         #endregion
