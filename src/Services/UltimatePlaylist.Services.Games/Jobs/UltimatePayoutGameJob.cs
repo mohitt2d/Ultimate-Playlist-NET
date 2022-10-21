@@ -98,7 +98,8 @@ namespace UltimatePlaylist.Services.Games.Jobs
                 todaysGame = await UltimatePayoutRepository.AddAsync(new UltimatePayoutEntity()
                 {
                     GameDate = currentDate,
-                    Reward = GamesConfig.UltimateBaseReward,
+                    //2022-10-21 Reward = GamesConfig.UltimateBaseReward,
+                    Reward = 20000,
                 });
             }
 

@@ -169,7 +169,8 @@ namespace UltimatePlaylist.Services.Games
                 NextDrawingDate = timeDiff,
                 NextUltimateDate = timeDiff,
                 IsUnclaimed = isCreatedTodayUser ? false : isUnclaimed is null,
-                NextUltimatePrize = lastUltimateGame is not null ? lastUltimateGame.Reward : 20000,
+                NextUltimatePrize = 20000,
+               //2022-10-21 NextUltimatePrize = lastUltimateGame is not null ? lastUltimateGame.Reward : 20000,
                 TicketsCount = avaiableTodayTicketsCount,
                 UnclaimedWinnings = Mapper.Map<List<UserWinningReadServicModel>>(winnings),
             };

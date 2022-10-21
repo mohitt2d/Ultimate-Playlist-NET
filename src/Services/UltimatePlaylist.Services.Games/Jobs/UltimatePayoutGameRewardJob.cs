@@ -70,12 +70,14 @@ namespace UltimatePlaylist.Services.Games.Jobs
                     await UltimatePayoutRepository.AddAsync(new UltimatePayoutEntity()
                     {
                         GameDate = currentGameDate,
-                        Reward = GamesConfig.UltimateBaseReward,
+                        // Reward = GamesConfig.UltimateBaseReward,
+                        Reward = 20000,
                     });
                 }
                 else
                 {
-                    currentGame.Reward += GamesConfig.UltimateIncrementReward;
+                    // currentGame.Reward += GamesConfig.UltimateIncrementReward;
+                    currentGame.Reward = 20000; // 2022-10-21
                     /*+ (monthsSinceLastWinner
                     ? GamesConfig.UltimateIncrementReward * monthsSinceLastWinner
                     : GamesConfig.UltimateIncrementReward * monthsSinceLaunch);*/

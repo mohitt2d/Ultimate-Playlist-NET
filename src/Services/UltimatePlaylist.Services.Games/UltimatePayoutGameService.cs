@@ -216,7 +216,8 @@ namespace UltimatePlaylist.Services.Games
                 nextGame = await UltimatePayoutRepository.AddAsync(new UltimatePayoutEntity()
                 {
                     GameDate = gameDate,
-                    Reward = GamesConfig.UltimateBaseReward,
+                    // Reward = GamesConfig.UltimateBaseReward,
+                    Reward = (GamesConfig.UltimateBaseReward != 0) ? GamesConfig.UltimateBaseReward : 20000,//2022-10-21 : 20000
                 });
             }
 
