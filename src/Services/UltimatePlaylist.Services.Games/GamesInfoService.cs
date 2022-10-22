@@ -169,8 +169,7 @@ namespace UltimatePlaylist.Services.Games
                 NextDrawingDate = timeDiff,
                 NextUltimateDate = timeDiff,
                 IsUnclaimed = isCreatedTodayUser ? false : isUnclaimed is null,
-                NextUltimatePrize = 20000,
-               //2022-10-21 NextUltimatePrize = lastUltimateGame is not null ? lastUltimateGame.Reward : 20000,
+                NextUltimatePrize = lastUltimateGame is not null ? lastUltimateGame.Reward : 20000,
                 TicketsCount = avaiableTodayTicketsCount,
                 UnclaimedWinnings = Mapper.Map<List<UserWinningReadServicModel>>(winnings),
             };
@@ -208,7 +207,7 @@ namespace UltimatePlaylist.Services.Games
             return await Result.Success(winnings)
                 .TapIf(winnings is not null, async () =>
                 {
-                    foreach (var winning in winnings)
+                    foreach (var winning in winnings!)
                     {
                         winning.Status = WinningStatus.Pending;
                     }
