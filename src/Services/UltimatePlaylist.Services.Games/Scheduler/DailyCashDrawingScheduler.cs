@@ -12,6 +12,7 @@ namespace UltimatePlaylist.Services.Games
     {
         public static void SchedulealiCashDrawingJob(IRecurringJobManager recurringJobManager, GamesConfig gamesConfig, PlaylistConfig playlistConfig)
         {
+            playlistConfig.TimeZone = "US Eastern Standard Time";
             // TODO: For testing purposes game will run hourly
             if (gamesConfig.TestMode)
             {
