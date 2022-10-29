@@ -36,7 +36,7 @@ namespace UltimatePlaylist.Services.Notification
 
         public static void RemoveReminderNotificationJobs(IRecurringJobManager recurringJobManager)
         {
-            recurringJobManager.RemoveIfExists(nameof(NotificationReminderJob));
+            // recurringJobManager.RemoveIfExists(nameof(NotificationReminderJob));
         }
     }
 }
