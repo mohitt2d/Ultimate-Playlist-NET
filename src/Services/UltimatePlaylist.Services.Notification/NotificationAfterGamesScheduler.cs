@@ -16,6 +16,7 @@ namespace UltimatePlaylist.Services.Notification
             GamesConfig gamesConfig,
             PlaylistConfig playlistConfig)
         {
+
             /*if (gamesConfig.TestMode)
             {
                 recurringJobManager.AddOrUpdate<NotificationAfterGamesJob>(
