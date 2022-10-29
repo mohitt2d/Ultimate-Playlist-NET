@@ -36,7 +36,7 @@ namespace UltimatePlaylist.Services.Notification
 
         public static void RemoveNotificationBeforeGamesJobs(IRecurringJobManager recurringJobManager)
         {
-            recurringJobManager.RemoveIfExists(nameof(NotificationBeforeGamesJob));
+            // recurringJobManager.RemoveIfExists(nameof(NotificationBeforeGamesJob));
         }
     }
 }
