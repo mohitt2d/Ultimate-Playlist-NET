@@ -85,6 +85,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
                     {
                         if (!usersSentTo.Contains(user.Id))
                         {
+                            /*
                             await NotificationService.SendPushNotificationAsync(new NotificationRequestModel()
                             {
                                 DeviceToken = user.DeviceToken,
@@ -94,6 +95,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
                             });
 
                             usersSentTo.Add(user.Id);
+                            */
                         }
                     }
                 }

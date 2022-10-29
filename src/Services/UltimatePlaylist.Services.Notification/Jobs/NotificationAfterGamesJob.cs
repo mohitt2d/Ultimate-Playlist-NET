@@ -91,6 +91,7 @@ namespace UltimatePlaylist.Services.Notification.Jobs
                         var isUnclaimed = await GamesWinningCollectionService.Get(user.ExternalId);
                         if (!usersSentTo.Contains(user.Id) && isUnclaimed is null)
                         {
+                            /*
                             await NotificationService.SendPushNotificationAsync(new NotificationRequestModel()
                             {
                                 DeviceToken = user.DeviceToken,
@@ -98,8 +99,9 @@ namespace UltimatePlaylist.Services.Notification.Jobs
                                 Message = Message,
                                 Recipient = user.Name,
                             });
+                            
 
-                            usersSentTo.Add(user.Id);
+                            usersSentTo.Add(user.Id); */
                         }
                     }
                 }
