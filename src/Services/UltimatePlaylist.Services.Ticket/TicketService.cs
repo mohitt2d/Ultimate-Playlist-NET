@@ -182,6 +182,18 @@ namespace UltimatePlaylist.Services.Ticket
             return counts;
         }
 
+        public async Task<int> GetHalfOfPlaylistTickets(Guid userExternalId)
+        {
+            var counts = await TicketRepository.CountAsync(new TicketSpecification()
+                .WithUser()
+                .ByUserSongHistoryExternalId(userExternalId)
+                .ByTodaysTickets()
+                .ByType(TicketType.Jackpot)
+                .ByEarnedType(TicketEarnedType.HalfOfPlaylist)
+                .OnlyNotUsed());
+            return counts;
+        }
+
         #endregion
 
         #region Private Methods

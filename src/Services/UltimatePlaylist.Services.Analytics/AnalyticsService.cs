@@ -310,6 +310,12 @@ namespace UltimatePlaylist.Services.Analytics
                 return Result.Success(false);
             }
 
+            var todaysHalfOfPlaylistTicketsCount = await TicketService.GetHalfOfPlaylistTickets(userExternalId);
+            if (todaysHalfOfPlaylistTicketsCount > 0)
+            {
+                return Result.Success(false);
+            }
+
             var song = playlist.Songs.FirstOrDefault(x => x.ExternalId == saveAnalyticsDataWriteServiceModel.SongExternalId);
             if (song is null)
             {
@@ -325,6 +331,8 @@ namespace UltimatePlaylist.Services.Analytics
             Logger.LogError(JsonConvert.SerializeObject(saveAnalyticsDataWriteServiceModel));
             Logger.LogError($"By PlaylistSOng: {thirtySecondTickets}");
             Logger.LogError("=========== thirtySecondTickets =============");*/
+
+
 
             if (((thirtySecondTickets + 1) == (playlistSize / 2)) || (playlistSize == (thirtySecondTickets + 1)))
             {

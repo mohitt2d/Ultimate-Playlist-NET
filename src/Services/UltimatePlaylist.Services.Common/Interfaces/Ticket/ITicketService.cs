@@ -23,5 +23,6 @@ namespace UltimatePlaylist.Services.Common.Interfaces.Ticket
         Task<int> GetThirtySecondsTickets(Guid userExternalId);
 
         Task<int> GetThirtySecondsHistoryTickets(Guid userExternalId);
+        Task<int> GetHalfOfPlaylistTickets(Guid userExternalId);
     }
 }
