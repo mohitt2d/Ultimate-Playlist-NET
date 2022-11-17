@@ -7,6 +7,7 @@ using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Common.Mvc.Helpers;
 using UltimatePlaylist.Database.Infrastructure.Entities.Games;
+using UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications;
 using UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces;
 using UltimatePlaylist.Games.Interfaces;
 using UltimatePlaylist.Games.Models.Raffle;
@@ -79,6 +80,7 @@ namespace UltimatePlaylist.Services.Games.Jobs
 
         #region Public methods
 
+        [Hangfire.AutomaticRetry (Attempts = 0)]
         public async Task RunDailyCashGame()
         {
             DailyCashDrawingEntity game = default;
@@ -86,6 +88,9 @@ namespace UltimatePlaylist.Services.Games.Jobs
 
             var todayDate = DateTimeHelper.ToTodayUTCTimeForTimeZoneRelativeTime(PlaylistConfig.TimeZone);
             var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
+
+            await DailyCashDrawingRepository.FirstOrDefaultAsync(
+                new DailyCashDrawingSpecification(false).ByGameDate(currentDate));
 
             var result = await Result.Success()
                 .Tap(async () => game = await DailyCashDrawingRepository.AddAsync(new DailyCashDrawingEntity()
