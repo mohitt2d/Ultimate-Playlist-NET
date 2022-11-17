@@ -247,11 +247,11 @@ namespace UltimatePlaylist.MobileApi
             app.SetupSwaggerAndHealth(ApiType.Mobile, Configuration.GetValue<bool>("EnableSwagger"));
             app.SetupHangfire();
             app.SetupApi();
-            /*
+
             DailyCashDrawingScheduler.RemoveDaliCashDrawingJobs(recurringJobManager);
             UltimatePayoutGameScheduler.RemoveUltimatePayoutJob(recurringJobManager);
             UltimatePayoutGameRewardScheduler.RemoveUltimatePayoutGameRewardJob(recurringJobManager);
-            */
+
             if (gamesConfig.Value.RunGames)
             {
                 UltimatePayoutGameRewardScheduler.ScheduleUltimatePayoutGameRewardJob(recurringJobManager, playlistConfig.Value.TimeZone);
