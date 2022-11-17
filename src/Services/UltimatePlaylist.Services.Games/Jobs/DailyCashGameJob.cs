@@ -88,10 +88,7 @@ namespace UltimatePlaylist.Services.Games.Jobs
 
             var todayDate = DateTimeHelper.ToTodayUTCTimeForTimeZoneRelativeTime(PlaylistConfig.TimeZone);
             var currentDate = todayDate.Add(PlaylistConfig.StartDateOffSet);
-
-            await DailyCashDrawingRepository.FirstOrDefaultAsync(
-                new DailyCashDrawingSpecification(false).ByGameDate(currentDate));
-
+            
             var result = await Result.Success()
                 .Tap(async () => game = await DailyCashDrawingRepository.AddAsync(new DailyCashDrawingEntity()
                 {
