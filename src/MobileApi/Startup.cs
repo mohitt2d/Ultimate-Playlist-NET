@@ -89,8 +89,6 @@ namespace UltimatePlaylist.MobileApi
             var connectionString = Configuration.GetConnectionString(Config.ConnectionString);
             services.UseDatabase<EFContext>(connectionString, MigrationsAssemblyName);
 
-            //services.AddDbContext<EFContext>(options => options.UseSqlServer(connectionString));
-
             services.AddDbContext<EFContext>(options => options.UseSqlServer(connectionString, builder =>
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
