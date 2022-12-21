@@ -44,6 +44,7 @@ namespace UltimatePlaylist.MobileApi
             Configuration = configuration;
         }
 
+
         public IConfiguration Configuration { get; }
 
         private string MigrationsAssemblyName => $"{typeof(Startup).Namespace.Split('.')[0]}.{MigrationsAssemblySuffixName}";
