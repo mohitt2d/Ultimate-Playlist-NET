@@ -2,13 +2,26 @@
 
 using AutoMapper;
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UltimatePlaylist.Common.Config;
 using UltimatePlaylist.Common.Enums;
 using UltimatePlaylist.Common.Mvc.Attributes;
 using UltimatePlaylist.Common.Mvc.Controllers;
 using UltimatePlaylist.MobileApi.Models.Games;
 using UltimatePlaylist.Services.Common.Interfaces.Games;
+using UltimatePlaylist.Services.Games.Jobs;
 using static UltimatePlaylist.Common.Mvc.Consts.Consts;
+
+
+using UltimatePlaylist.Common.Mvc.Helpers;
+using UltimatePlaylist.Database.Infrastructure.Entities.Games;
+using UltimatePlaylist.Database.Infrastructure.Entities.Games.Specifications;
+using UltimatePlaylist.Database.Infrastructure.Repositories.Interfaces;
+using UltimatePlaylist.Games.Interfaces;
+using UltimatePlaylist.Games.Models.Raffle;
+using UltimatePlaylist.Services.Common.Interfaces.Ticket;
+using Microsoft.Extensions.Options;
 
 #endregion
 
@@ -16,7 +29,7 @@ namespace UltimatePlaylist.MobileApi.Area.Dsp
 {
     [Area("Games")]
     [Route("[controller]")]
-    [AuthorizeRole(UserRole.User)]
+    //[AuthorizeRole(UserRole.User)]
     [ApiExplorerSettings(GroupName = MobileApiGroups.User)]
     public class GamesController : BaseControllerWithAuthentication
     {
@@ -26,6 +39,13 @@ namespace UltimatePlaylist.MobileApi.Area.Dsp
         private readonly Lazy<IWinningsInfoService> WinningsServiceProvider;
         private readonly Lazy<IGamesInfoService> GamesInfoServiceProvider;
         private readonly Lazy<IUltimatePayoutGameService> UltimatePayoutGameServiceProvider;
+        private readonly Lazy<IDailyCashTicketsService> DailyCashTicketsServiceProvider;
+        private readonly Lazy<IRaffleService> RaffleServiceProvider;
+        private readonly Lazy<IRepository<DailyCashDrawingEntity>> DailyCashDrawingRepositoryProvider;
+        private readonly Lazy<ILogger<DailyCashGameJob>> LoggerProvider;
+        private readonly Lazy<IGamesWinningCollectionService> GamesWinningCollectionServiceProvider;
+        private readonly Lazy<IWinningsService> WinningsProvider;
+        private readonly IOptions<PlaylistConfig> PlaylistConfig;
 
         #endregion
 
@@ -35,12 +55,29 @@ namespace UltimatePlaylist.MobileApi.Area.Dsp
             Lazy<IMapper> mapperProvider,
             Lazy<IWinningsInfoService> winningsServiceProvider,
             Lazy<IGamesInfoService> gamesInfoServiceProvider,
-            Lazy<IUltimatePayoutGameService> ultimatePayoutGameServiceProvider)
+            Lazy<IUltimatePayoutGameService> ultimatePayoutGameServiceProvider,
+
+
+            Lazy<IDailyCashTicketsService> dailyCashTicketsServiceProvider,
+            Lazy<IRaffleService> raffleServiceProvider,
+            Lazy<IRepository<DailyCashDrawingEntity>> dailyCashDrawingRepositoryProvider,
+            Lazy<ILogger<DailyCashGameJob>> loggerProvider,
+            Lazy<IGamesWinningCollectionService> gamesWinningCollectionServiceProvider,
+
+            Lazy<IWinningsService> winningsProvider,
+            IOptions<PlaylistConfig> playlistConfig)
         {
             MapperProvider = mapperProvider;
             WinningsServiceProvider = winningsServiceProvider;
             GamesInfoServiceProvider = gamesInfoServiceProvider;
             UltimatePayoutGameServiceProvider = ultimatePayoutGameServiceProvider;
+            DailyCashTicketsServiceProvider = dailyCashTicketsServiceProvider;
+            RaffleServiceProvider = raffleServiceProvider;
+            DailyCashDrawingRepositoryProvider = dailyCashDrawingRepositoryProvider;
+            LoggerProvider = loggerProvider;
+            GamesWinningCollectionServiceProvider = gamesWinningCollectionServiceProvider;
+            this.WinningsProvider=winningsProvider;
+            PlaylistConfig = playlistConfig;
         }
 
         #endregion
@@ -102,6 +139,15 @@ namespace UltimatePlaylist.MobileApi.Area.Dsp
             return await UltimatePayoutGameService.CheckNewestGame(XUserExternalId)
                .Map(result => Mapper.Map<UltimatePayoutResponseModel>(result))
                .Finally(BuildEnvelopeResult);
+        }
+
+        [HttpGet("run-daily-drawing-manually")]
+        [AllowAnonymous]
+        public async Task RunDailyCashGameJobManuallyAsync()
+        {
+            var dailyCashGameJob = new DailyCashGameJob(DailyCashTicketsServiceProvider, RaffleServiceProvider, DailyCashDrawingRepositoryProvider, WinningsProvider,
+                LoggerProvider, GamesWinningCollectionServiceProvider, PlaylistConfig);
+            await dailyCashGameJob.RunDailyCashGame();
         }
 
         #endregion
