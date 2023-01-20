@@ -142,7 +142,6 @@ namespace UltimatePlaylist.MobileApi.Area.Dsp
         }
 
         [HttpGet("run-daily-drawing-manually")]
-        [AllowAnonymous]
         public async Task RunDailyCashGameJobManuallyAsync()
         {
             var dailyCashGameJob = new DailyCashGameJob(DailyCashTicketsServiceProvider, RaffleServiceProvider, DailyCashDrawingRepositoryProvider, WinningsProvider,
