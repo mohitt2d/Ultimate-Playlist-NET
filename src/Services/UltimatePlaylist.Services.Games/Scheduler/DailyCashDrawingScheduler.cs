@@ -28,7 +28,7 @@ namespace UltimatePlaylist.Services.Games
                 recurringJobManager.AddOrUpdate<DailyCashGameJob>(
                    nameof(DailyCashGameJob),
                    p => p.RunDailyCashGame(),
-                   Cron.Monthly(),
+                   Cron.Yearly(),
                    timeZone: TimeZoneInfo.FindSystemTimeZoneById(playlistConfig.TimeZone));
             }
         }
