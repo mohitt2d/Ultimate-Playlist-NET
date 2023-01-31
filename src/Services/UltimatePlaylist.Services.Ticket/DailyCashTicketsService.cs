@@ -63,6 +63,7 @@ namespace UltimatePlaylist.Services.Ticket
                          .OnlyNotUsed()))
                 .Tap(ticketsForSongs => tickets.AddRange(Mapper.Map<List<RaffleUserTicketReadServiceModel>>(ticketsForSongs)))
                 .Map(_ => tickets);
+
         }
 
         public async Task UseTickets(IEnumerable<Guid> ticketsExternalIds)
