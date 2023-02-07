@@ -88,5 +88,6 @@
         CannotGetUserPlaylistSong,
         DisconnectedFromAppleMusic,
         NoTicketsForGame,
+        PhoneIsTaken
     }
 }
