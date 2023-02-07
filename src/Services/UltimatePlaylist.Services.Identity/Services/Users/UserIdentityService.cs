@@ -130,7 +130,7 @@ namespace UltimatePlaylist.Services.Identity.Services.Users
             var phoneNumberExists = UserManager.Users.Any(x => x.PhoneNumber == request.PhoneNumber);
             if (phoneNumberExists)
             {
-                return Result.Failure(ErrorType.PhoneIsTaken.ToString());
+                return Result.Failure(ErrorMessages.InvalidPhoneNumber);
             }
             if (string.IsNullOrEmpty(newUser.PhoneNumber))
             {

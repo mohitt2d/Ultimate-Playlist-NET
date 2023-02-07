@@ -88,6 +88,6 @@
         CannotGetUserPlaylistSong,
         DisconnectedFromAppleMusic,
         NoTicketsForGame,
-        PhoneIsTaken
+        InvalidPhoneNumber
     }
 }
