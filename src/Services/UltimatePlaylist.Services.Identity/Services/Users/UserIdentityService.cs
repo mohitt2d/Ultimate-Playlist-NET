@@ -127,6 +127,11 @@ namespace UltimatePlaylist.Services.Identity.Services.Users
             newUser.Gender = gender;
             newUser.IsActive = true;
             newUser.ShouldNotificationBeEnabled = true;
+            var phoneNumberExists = UserManager.Users.Any(x => x.PhoneNumber == request.PhoneNumber);
+            if (phoneNumberExists)
+            {
+                return Result.Failure(ErrorType.PhoneIsTaken.ToString());
+            }
             if (string.IsNullOrEmpty(newUser.PhoneNumber))
             {
                 newUser.PhoneNumber = string.Empty;
