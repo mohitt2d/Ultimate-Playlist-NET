@@ -39,6 +39,6 @@
         public const string UserHasNoTickets = "No tickets avalible for ultimate payout";
         public const string DisconnectedFromAppleMusic = "Your account was disconnected from Apple Music, please connect again from your profile screen.";
         public const string DisconnectedFromSpotify = "Your account was disconnected from Spotify Music, please connect again from your profile screen.";
-        public const string InvalidPhoneNumber = "Your account was disconnected from Spotify Music, please connect again from your profile screen.";
+        public const string InvalidPhoneNumber = "The phone number is already taken.";
     }
 }
